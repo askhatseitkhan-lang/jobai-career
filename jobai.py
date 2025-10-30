@@ -1,6 +1,45 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
+st.set_page_config(
+    page_title="JobAI — Карьерный навигатор",
+    page_icon="🚀",
+    layout="wide"
+)
+
+# =============================
+# 🎯 МИНИМАЛЬНАЯ ОПТИМИЗАЦИЯ СЛАЙДЕРОВ
+# =============================
+st.markdown("""
+<style>
+/* Центрирование слайдеров на всех устройствах */
+.stSlider {
+    padding: 0 10px !important;
+}
+
+.stSlider > div > div {
+    width: 100% !important;
+}
+
+/* Увеличиваем область для тапов на мобильных */
+@media (max-width: 768px) {
+    .stSlider > div > div > div > div {
+        height: 32px !important;
+        width: 32px !important;
+        margin-top: -8px !important;
+    }
+    
+    .stSlider > div > div > div {
+        height: 16px !important;
+    }
+}
+
+/* Убираем смещение влево */
+.stSlider > div {
+    margin: 0 auto !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # =============================
 # 🌍 НАСТРОЙКА ЯЗЫКОВ
@@ -1382,4 +1421,5 @@ st.markdown(f"""
     💼 Бесплатные карьерные консультации | 🎯 Профессиональное тестирование
 </div>
 """, unsafe_allow_html=True)
+
 
