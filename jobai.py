@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import datetime
 
 st.set_page_config(
-    page_title="JobAI — Карьерный навигатор",
+    page_title="Job.AI — Карьерный навигатор",
     page_icon="🚀",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -15,7 +15,7 @@ st.set_page_config(
 # =============================
 LANGUAGES = {
     "Русский": {
-        "title": "JobAI Pro",
+        "title": "Job.AI Pro",
         "subtitle": "Искусственный интеллект для карьерного проектирования", 
         "language_select": "🌐 Выберите язык",
         "progress_text": "📊 Прогресс: {current}/{total} ({percentage}%)",
@@ -47,7 +47,7 @@ LANGUAGES = {
         "footer": "©️ 2024 JobAI Pro — Система искусственного интеллекта для карьерного проектирования"
     },
     "Қазақша": {
-        "title": "JobAI Pro", 
+        "title": "Job.AI Pro", 
         "subtitle": "Кәсіби жобалауға арналған жасанды интеллект",
         "language_select": "🌐 Тілді таңдаңыз",
         "progress_text": "📊 Прогресс: {current}/{total} ({percentage}%)",
