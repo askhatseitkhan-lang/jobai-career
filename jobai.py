@@ -1,45 +1,14 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
+import math
+
 st.set_page_config(
     page_title="JobAI — Карьерный навигатор",
     page_icon="🚀",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
-
-# =============================
-# 🎯 МИНИМАЛЬНАЯ ОПТИМИЗАЦИЯ СЛАЙДЕРОВ
-# =============================
-st.markdown("""
-<style>
-/* Центрирование слайдеров на всех устройствах */
-.stSlider {
-    padding: 0 10px !important;
-}
-
-.stSlider > div > div {
-    width: 100% !important;
-}
-
-/* Увеличиваем область для тапов на мобильных */
-@media (max-width: 768px) {
-    .stSlider > div > div > div > div {
-        height: 32px !important;
-        width: 32px !important;
-        margin-top: -8px !important;
-    }
-    
-    .stSlider > div > div > div {
-        height: 16px !important;
-    }
-}
-
-/* Убираем смещение влево */
-.stSlider > div {
-    margin: 0 auto !important;
-}
-</style>
-""", unsafe_allow_html=True)
 
 # =============================
 # 🌍 НАСТРОЙКА ЯЗЫКОВ
@@ -110,8 +79,9 @@ LANGUAGES = {
         "footer": "©️ 2024 JobAI Pro — Кәсіби жобалауға арналған жасанды интеллект жүйесі"
     }
 }
+
 # =============================
-# 🌌 ПРОДВИНУТЫЙ ФУТУРИСТИЧЕСКИЙ ДИЗАЙН
+# 🌌 ПРОДВИНУТЫЙ ФУТУРИСТИЧЕСКИЙ ДИЗАЙН С МОБИЛЬНОЙ ОПТИМИЗАЦИЕЙ
 # =============================
 st.markdown("""
 <style>
@@ -202,10 +172,11 @@ st.markdown("""
     box-shadow: 0 20px 50px rgba(0, 255, 204, 0.3);
 }
 
-/* Улучшенные слайдеры */
+/* Улучшенные слайдеры с правильным расположением меток */
 .stSlider {
     font-size: 1.4rem !important;
     margin: 25px 0;
+    position: relative;
 }
 
 .stSlider > div > div > div {
@@ -222,6 +193,23 @@ st.markdown("""
     width: 28px !important;
     margin-top: -7px !important;
     box-shadow: 0 0 20px rgba(0, 255, 204, 0.8);
+}
+
+/* Метки слайдера */
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
+    padding: 0 5px;
+}
+
+.slider-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #00ccff;
+    min-width: 30px;
+    text-align: center;
 }
 
 /* Профессиональные карточки результатов */
@@ -412,17 +400,6 @@ div.stButton > button:hover {
     transition: width 0.5s ease;
 }
 
-/* Адаптивность */
-@media (max-width: 768px) {
-    .main-header {
-        font-size: 2.8rem !important;
-    }
-    .question-container {
-        font-size: 1.3rem !important;
-        padding: 20px !important;
-    }
-}
-
 /* Сетка компетенций */
 .competency-grid {
     display: grid;
@@ -490,6 +467,176 @@ div.stButton > button:hover {
     font-size: 1.3rem;
     font-weight: 600;
     margin-bottom: 15px;
+}
+
+/* 📱 МОБИЛЬНАЯ ОПТИМИЗАЦИЯ */
+@media (max-width: 768px) {
+    .main-header {
+        font-size: 2.5rem !important;
+        letter-spacing: 1px;
+    }
+    
+    .sub-header {
+        font-size: 1.2rem !important;
+    }
+    
+    .question-container {
+        font-size: 1.2rem !important;
+        padding: 20px 15px !important;
+        margin-bottom: 20px;
+    }
+    
+    .stSlider {
+        font-size: 1.1rem !important;
+        margin: 20px 0;
+    }
+    
+    .stSlider > div > div > div > div {
+        height: 32px !important;
+        width: 32px !important;
+        margin-top: -9px !important;
+    }
+    
+    .stSlider > div > div > div {
+        height: 16px !important;
+    }
+    
+    .slider-label {
+        font-size: 1rem;
+    }
+    
+    div.stButton > button {
+        font-size: 1.3rem !important;
+        padding: 18px 35px !important;
+        width: 90%;
+        margin: 25px auto !important;
+    }
+    
+    .profession-card {
+        padding: 20px 15px;
+        margin: 15px 0;
+    }
+    
+    .metric-card {
+        padding: 15px 10px;
+        margin: 8px 5px;
+    }
+    
+    .metric-value {
+        font-size: 2rem;
+    }
+    
+    .gauge-container {
+        padding: 12px;
+        margin: 8px 0;
+    }
+    
+    .gauge-value {
+        font-size: 1.6rem;
+    }
+    
+    .success-message {
+        font-size: 1.6rem !important;
+    }
+    
+    .stars {
+        font-size: 2.5rem !important;
+    }
+    
+    .competency-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .css-1d391kg {
+        padding: 1rem;
+    }
+}
+
+/* Планшеты */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .main-header {
+        font-size: 3.2rem !important;
+    }
+    
+    .question-container {
+        font-size: 1.3rem !important;
+    }
+}
+
+/* Отключаем ховер-эффекты на мобильных */
+@media (hover: none) and (pointer: coarse) {
+    .question-container:hover {
+        transform: none;
+        box-shadow: 0 10px 35px rgba(0, 255, 204, 0.15);
+    }
+    
+    div.stButton > button:hover {
+        transform: none !important;
+        box-shadow: 0 10px 30px rgba(0, 255, 204, 0.4) !important;
+    }
+}
+
+/* Улучшаем скролл */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00ffcc;
+    border-radius: 4px;
+}
+
+/* Улучшаем тапы */
+button, [role="button"], .stSlider > div > div > div > div {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Адаптивные колонки */
+@media (max-width: 768px) {
+    .row-widget.stColumns {
+        flex-direction: column;
+    }
+    
+    .row-widget.stColumns > div {
+        width: 100% !important;
+        margin-bottom: 15px;
+    }
+}
+
+/* Улучшаем экспандеры */
+.streamlit-expanderHeader {
+    font-size: 1.1rem !important;
+    padding: 16px !important;
+}
+
+@media (max-width: 768px) {
+    .streamlit-expanderHeader {
+        font-size: 1rem !important;
+        padding: 14px !important;
+    }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 360px) {
+    .main-header {
+        font-size: 2rem !important;
+    }
+    
+    .question-container {
+        font-size: 1.1rem !important;
+        padding: 18px 12px !important;
+    }
+    
+    div.stButton > button {
+        font-size: 1.2rem !important;
+        padding: 16px 25px !important;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -1013,7 +1160,7 @@ questions_data = {
         "Сізді сәулет және құрылыс тартады ма?",
         "Қашықтан жұмыс істегіңіз келе ме?",
         "Құжаттармен жұмыс істеуді ұнатасыз ба?",
-        "Тәжірибе жасауды ұнатасыз ба?",
+        "Тәжірибе жасауді ұнатасыз ба?",
         "Психология сізді қызықтыра ма?",
         "Шығармашылық атмосферада жұмыс істегіңіз келе ме?",
         "Техникамен жұмыс істеуді ұнатасыз ба?",
@@ -1021,7 +1168,7 @@ questions_data = {
         "Ішкі дизайн сізді тартады ма?",
         "Қызмет көрсету саласында жұмыс істегіңіз келе ме?",
         "Дерекқорлармен жұмыс істеуді ұнатасыз ба?",
-        "Ғылыми әдебиеттерді оқуды ұнатасыз ба?",
+        "Ғылыми әдебиеттерді оқуді ұнатасыз ба?",
         "Ауыл шаруашылығы сізді қызықтыра ма?",
         "Мемлекеттік секторда жұмыс істегіңіз келе ме?",
         "Клиенттермен жұмыс істеуді ұнатасыз ба?"
@@ -1145,12 +1292,29 @@ if st.session_state.test_started:
         current_q = questions[st.session_state.current_question]
         st.markdown(f'<div class="question-container">{st.session_state.current_question + 1}. {current_q}</div>', unsafe_allow_html=True)
         
-        # Слайдер для ответа
-        answer = st.slider("Ваш ответ", 1, 5, 3, key=f"q{st.session_state.current_question}", label_visibility="collapsed")
+        # Слайдер для ответа с метками
+        answer = st.slider(
+            "Ваш ответ", 
+            1, 5, 3, 
+            key=f"q{st.session_state.current_question}", 
+            label_visibility="collapsed"
+        )
+        
+        # Метки слайдера
+        st.markdown('''
+        <div class="slider-labels">
+            <span class="slider-label">1</span>
+            <span class="slider-label">2</span>
+            <span class="slider-label">3</span>
+            <span class="slider-label">4</span>
+            <span class="slider-label">5</span>
+        </div>
+        ''', unsafe_allow_html=True)
         
         col1, col2 = st.columns([3, 1])
         with col2:
-            if st.button("Следующий вопрос →" if st.session_state.current_question < len(questions) - 1 else "Завершить тест"):
+            button_text = "Далее →" if st.session_state.current_question < len(questions) - 1 else "Завершить тест"
+            if st.button(button_text, use_container_width=True):
                 st.session_state.scores.append(answer)
                 st.session_state.current_question += 1
                 if st.session_state.current_question >= len(questions):
@@ -1421,5 +1585,3 @@ st.markdown(f"""
     💼 Бесплатные карьерные консультации | 🎯 Профессиональное тестирование
 </div>
 """, unsafe_allow_html=True)
-
-
