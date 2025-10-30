@@ -1,26 +1,22 @@
 import streamlit as st
-import math
 import pandas as pd
 from datetime import datetime
 
 # =============================
-# 📱 МОБИЛЬНАЯ ОПТИМИЗАЦИЯ - ВСТАВЬТЕ ВСЁ ЭТО ПРЯМО ЗДЕСЬ
+# 📱 МОБИЛЬНАЯ ОПТИМИЗАЦИЯ
 # =============================
 
-# Сначала обновим конфигурацию для мобильных
 st.set_page_config(
     page_title="JobAI — Карьерный навигатор",
     page_icon="🚀",
     layout="wide",
-    initial_sidebar_state="collapsed"  # Сворачиваем сайдбар на мобильных
+    initial_sidebar_state="collapsed"
 )
 
-# Добавляем специальные мобильные стили
 st.markdown("""
 <style>
 /* 📱 МОБИЛЬНЫЕ СТИЛИ */
 @media (max-width: 768px) {
-    /* Главные заголовки */
     .main-header {
         font-size: 2.2rem !important;
         letter-spacing: 1px;
@@ -32,7 +28,6 @@ st.markdown("""
         margin-bottom: 1rem;
     }
     
-    /* Вопросы */
     .question-container {
         font-size: 1.1rem !important;
         padding: 20px 15px !important;
@@ -40,7 +35,6 @@ st.markdown("""
         border-radius: 15px;
     }
     
-    /* Слайдеры - делаем больше для пальцев */
     .stSlider {
         font-size: 1rem !important;
         margin: 20px 0;
@@ -56,7 +50,6 @@ st.markdown("""
         margin-top: -8px !important;
     }
     
-    /* Кнопки */
     div.stButton > button {
         font-size: 1.2rem !important;
         padding: 18px 25px !important;
@@ -65,14 +58,12 @@ st.markdown("""
         border-radius: 15px !important;
     }
     
-    /* Карточки профессий */
     .profession-card {
         padding: 20px 15px;
         margin: 15px 0;
         border-radius: 15px;
     }
     
-    /* Метрики и статистика */
     .metric-card {
         padding: 15px 10px;
         margin: 5px;
@@ -87,7 +78,6 @@ st.markdown("""
         font-size: 0.9rem;
     }
     
-    /* Сетка компетенций */
     .competency-grid {
         grid-template-columns: 1fr;
         gap: 10px;
@@ -103,7 +93,6 @@ st.markdown("""
         font-size: 1.6rem;
     }
     
-    /* Индикаторы */
     .gauge-container {
         padding: 12px;
         margin: 8px 0;
@@ -114,7 +103,6 @@ st.markdown("""
         font-size: 1.6rem;
     }
     
-    /* Анимация успеха */
     .success-message {
         font-size: 1.5rem !important;
         margin: 15px 0;
@@ -124,24 +112,20 @@ st.markdown("""
         font-size: 2rem !important;
     }
     
-    /* Улучшаем отступы */
     .css-1d391kg {
         padding: 1rem;
     }
     
-    /* Тексты */
     p, li, .stMarkdown {
         font-size: 0.95rem;
         line-height: 1.4;
     }
     
-    /* Скрываем сложные элементы на мобильных */
     .css-1v0mbdj {
         display: none;
     }
 }
 
-/* Планшеты */
 @media (max-width: 1024px) and (min-width: 769px) {
     .main-header {
         font-size: 2.8rem !important;
@@ -153,7 +137,6 @@ st.markdown("""
     }
 }
 
-/* Отключаем ховер-эффекты на тач-устройствах */
 @media (hover: none) and (pointer: coarse) {
     .question-container:hover {
         transform: none !important;
@@ -166,7 +149,6 @@ st.markdown("""
     }
 }
 
-/* Улучшаем скролл на мобильных */
 ::-webkit-scrollbar {
     width: 6px;
 }
@@ -180,24 +162,20 @@ st.markdown("""
     border-radius: 3px;
 }
 
-/* Улучшаем тапы (для мобильных) */
 button, [role="button"], .stSlider > div > div > div > div {
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Оптимизация для медленных сетей */
 [data-testid="stAppViewContainer"] {
     background: #0a0a0a;
 }
 
-/* Убираем лишние отступы на мобильных */
 .block-container {
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
 
-/* Адаптивные колонки */
 @media (max-width: 768px) {
     .row-widget.stColumns {
         flex-direction: column;
@@ -209,25 +187,21 @@ button, [role="button"], .stSlider > div > div > div > div {
     }
 }
 
-/* Улучшаем экспандеры (раскрывающиеся блоки) */
 .streamlit-expanderHeader {
     font-size: 1.1rem !important;
     padding: 15px !important;
 }
 
-/* Оптимизация баров прогресса */
 .stProgress > div > div > div {
     height: 10px !important;
 }
 
-/* Улучшаем отображение текста в сайдбаре */
 @media (max-width: 768px) {
     .css-1d391kg {
         font-size: 0.9rem;
     }
 }
 
-/* Специальные стили для очень маленьких экранов */
 @media (max-width: 360px) {
     .main-header {
         font-size: 1.8rem !important;
@@ -246,9 +220,7 @@ button, [role="button"], .stSlider > div > div > div > div {
 </style>
 """, unsafe_allow_html=True)
 
-# Также добавим функцию определения мобильного устройства
 def is_mobile():
-    """Определяем мобильное ли устройство"""
     try:
         user_agent = st.request.headers.get("User-Agent", "").lower()
         mobile_words = ['mobile', 'android', 'iphone', 'ipad', 'tablet']
@@ -256,20 +228,14 @@ def is_mobile():
     except:
         return False
 
-# Используем эту функцию для адаптации контента
 MOBILE_MODE = is_mobile()
+
 # =============================
-# 🌍 НАСТРОЙКА ЯЗЫКОВ - А ЭТО УЖЕ БЫЛО В ВАШЕМ КОДЕ
-# =============================
-LANGUAGES = {
-    "Русский": {
-        "title": "JobAI Pro",}
-        # =============================
 # 🌍 НАСТРОЙКА ЯЗЫКОВ
 # =============================
 LANGUAGES = {
     "Русский": {
-        "title": "Job.AI Pro",
+        "title": "JobAI Pro",
         "subtitle": "Искусственный интеллект для карьерного проектирования", 
         "language_select": "🌐 Выберите язык",
         "progress_text": "📊 Прогресс: {current}/{total} ({percentage}%)",
@@ -301,7 +267,7 @@ LANGUAGES = {
         "footer": "©️ 2024 JobAI Pro — Система искусственного интеллекта для карьерного проектирования"
     },
     "Қазақша": {
-        "title": "Job.AI Pro", 
+        "title": "JobAI Pro", 
         "subtitle": "Кәсіби жобалауға арналған жасанды интеллект",
         "language_select": "🌐 Тілді таңдаңыз",
         "progress_text": "📊 Прогресс: {current}/{total} ({percentage}%)",
@@ -333,7 +299,6 @@ LANGUAGES = {
         "footer": "©️ 2024 JobAI Pro — Кәсіби жобалауға арналған жасанды интеллект жүйесі"
     }
 }
-
 # =============================
 # 🌌 ПРОДВИНУТЫЙ ФУТУРИСТИЧЕСКИЙ ДИЗАЙН
 # =============================
@@ -1645,4 +1610,3 @@ st.markdown(f"""
     💼 Бесплатные карьерные консультации | 🎯 Профессиональное тестирование
 </div>
 """, unsafe_allow_html=True)
-
