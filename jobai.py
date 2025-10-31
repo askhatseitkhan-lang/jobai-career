@@ -6,8 +6,6 @@ import math
 import json
 import base64
 from typing import Dict, List, Any
-import plotly.graph_objects as go
-import plotly.express as px
 
 st.set_page_config(
     page_title="Job.AI — Intelligent Career Platform",
@@ -573,6 +571,23 @@ div.stButton > button:first-child:hover {
 .mentor-card:hover {
     transform: translateY(-2px);
     border-color: #3b82f6;
+}
+
+/* Chart containers */
+.chart-container {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 1rem 0;
+    border: 1px solid #475569;
+}
+
+.chart-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 1rem;
+    text-align: center;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -1569,11 +1584,12 @@ if st.session_state.assessment_complete:
         for insight in insights:
             st.markdown(f"- {insight}")
         
-        # Skills
+        # Skills visualization
         st.markdown("#### 🔧 Навыки")
         for skill, value in profession_info["skills"].items():
             st.markdown(f"**{skill}**")
             st.markdown(f'<div class="skill-bar-container"><div class="skill-bar-fill" style="width: {value}%;"></div></div>', unsafe_allow_html=True)
+            st.markdown(f"<div style='text-align: right; color: #cbd5e1; font-size: 0.8rem;'>{value}%</div>", unsafe_allow_html=True)
     
     # MARKET ANALYSIS WITH COMPARISON
     st.markdown("---")
