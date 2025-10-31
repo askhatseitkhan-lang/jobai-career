@@ -1,1027 +1,1274 @@
 import streamlit as st
-import time
-import random
 import pandas as pd
-from datetime import datetime
 import numpy as np
+from datetime import datetime, timedelta
+import math
+
+st.set_page_config(
+    page_title="Job.AI — Intelligent Career Platform",
+    page_icon="🚀",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
 # =============================
-# 🎨 ENHANCED FUTURISTIC STYLING
+# 🌍 LANGUAGE SETTINGS
+# =============================
+LANGUAGES = {
+    "Русский": {
+        "title": "Job.AI",
+        "subtitle": "Интеллектуальная платформа карьерного развития", 
+        "language_select": "🌐 Выберите язык",
+        "progress_text": "📊 Прогресс: {current}/{total} ({percentage}%)",
+        "start_test": "🚀 НАЧАТЬ ТЕСТИРОВАНИЕ",
+        "analyze_results": "🚀 АНАЛИЗИРОВАТЬ РЕЗУЛЬТАТЫ",
+        "competency_profile": "📈 Профиль компетенций",
+        "technical": "Технические",
+        "creative": "Творческие",
+        "social": "Социальные", 
+        "physical": "Физические",
+        "salary_range": "💰 Уровень зарплаты",
+        "market_analysis": "📊 Анализ рынка",
+        "key_competencies": "🔧 Ключевые компетенции",
+        "recommended_professions": "💼 Рекомендуемые профессии",
+        "description": "Описание",
+        "market_demand": "Спрос на рынке",
+        "education": "Образование",
+        "growth": "Перспективы роста",
+        "responsibilities": "Обязанности",
+        "requirements": "Требования",
+        "key_employers": "🏢 Работодатели",
+        "detailed_analysis": "📊 Детальный анализ",
+        "development_plan": "🎯 План развития",
+        "career_trajectory": "🗺️ Карьерный путь", 
+        "professional_support": "📞 Профессиональная поддержка",
+        "career_consultants": "🎓 Карьерные консультанты",
+        "career_development_center": "🏢 Центр развития карьеры",
+        "online_booking": "📅 Онлайн-запись",
+        "footer": "©️ 2024 Job.AI — Платформа карьерного развития",
+        "assessment_score": "Общий балл",
+        "compatibility_level": "Уровень совместимости",
+        "industry_trends": "Тренды индустрии",
+        "skill_gap_analysis": "Анализ навыков",
+        "learning_path": "Обучение",
+        "certification_recommendations": "Сертификаты",
+        "networking_strategy": "Нетворкинг"
+    },
+    "Қазақша": {
+        "title": "Job.AI", 
+        "subtitle": "Кәсіби дамудың интеллектуалды платформасы",
+        "language_select": "🌐 Тілді таңдаңыз",
+        "progress_text": "📊 Прогресс: {current}/{total} ({percentage}%)",
+        "start_test": "🚀 ТЕСТІЛЕУДІ БАСТАУ",
+        "analyze_results": "🚀 НӘТИЖЕЛЕРДІ ТАЛДАУ",
+        "competency_profile": "📈 Құзыреттілік профилі",
+        "technical": "Техникалық",
+        "creative": "Шығармашылық",
+        "social": "Әлеуметтік",
+        "physical": "Физикалық",
+        "salary_range": "💰 Жалақы деңгейі",
+        "market_analysis": "📊 Нарықтық талдау",
+        "key_competencies": "🔧 Негізгі құзыреттіліктер",
+        "recommended_professions": "💼 Ұсынылатын кәсіптер",
+        "description": "Сипаттама",
+        "market_demand": "Нарықтағы сұраныс",
+        "education": "Білім",
+        "growth": "Өсу перспективалары",
+        "responsibilities": "Міндеттер",
+        "requirements": "Талаптар",
+        "key_employers": "🏢 Жұмыс берушілер",
+        "detailed_analysis": "📊 Толық талдау",
+        "development_plan": "🎯 Даму жоспары",
+        "career_trajectory": "🗺️ Кәсіби жол",
+        "professional_support": "📞 Кәсіби қолдау",
+        "career_consultants": "🎓 Кәсіби кеңесшілер",
+        "career_development_center": "🏢 Мансапты дамыту орталығы",
+        "online_booking": "📅 Интернетке жазу",
+        "footer": "©️ 2024 Job.AI — Кәсіби даму платформасы",
+        "assessment_score": "Жалпы балл",
+        "compatibility_level": "Сәйкестік деңгейі",
+        "industry_trends": "Санат трендтері",
+        "skill_gap_analysis": "Дағдыларды талдау",
+        "learning_path": "Оқыту",
+        "certification_recommendations": "Сертификаттар",
+        "networking_strategy": "Желілесу"
+    }
+}
+
+# =============================
+# 🎨 PROFESSIONAL DESIGN
 # =============================
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-/* Enhanced Main Theme */
+/* Modern Professional Theme */
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(135deg, #0a0a2a 0%, #1a1a4a 25%, #2d1a4a 50%, #4a1a6a 75%, #6a1a8a 100%);
-    background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
-    color: #ffffff;
-    font-family: 'Exo 2', sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    color: #f8fafc;
+    font-family: 'Inter', sans-serif;
 }
 
-@keyframes gradientShift {
-    0% { background-position: 0% 50% }
-    50% { background-position: 100% 50% }
-    100% { background-position: 0% 50% }
-}
-
-/* Enhanced Headers */
+/* Main Header */
 .main-header {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 4.5rem;
-    font-weight: 900;
+    font-size: 4rem !important;
     text-align: center;
-    background: linear-gradient(45deg, #00ffff, #ff00ff, #00ff00, #ffff00);
-    background-size: 300% 300%;
+    font-weight: 800;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: neonShimmer 3s ease-in-out infinite;
-    margin-bottom: 1rem;
-    text-shadow: 0 0 30px rgba(0, 255, 255, 0.7);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
 }
 
-@keyframes neonShimmer {
-    0%, 100% { background-position: 0% 50% }
-    50% { background-position: 100% 50% }
-}
-
-.section-header {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 2.5rem;
-    font-weight: 700;
+.sub-header {
+    font-size: 1.4rem !important;
     text-align: center;
-    color: #00ffff;
-    margin: 2rem 0;
-    text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    font-family: 'Inter', sans-serif;
+    color: #cbd5e1;
+    margin-bottom: 3rem;
+    font-weight: 400;
+    line-height: 1.5;
 }
 
-/* Enhanced Cards */
+/* Question Containers */
+.question-container {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+    padding: 2.5rem;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    border: 1px solid #334155;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    font-family: 'Inter', sans-serif;
+    font-size: 1.3rem !important;
+    font-weight: 500;
+    color: #f1f5f9;
+    line-height: 1.6;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.question-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    transition: left 0.6s;
+}
+
+.question-container:hover::before {
+    left: 100%;
+}
+
+.question-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    border-color: #3b82f6;
+}
+
+/* Rating Scale */
+.rating-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 3rem 0;
+    gap: 1rem;
+}
+
+.rating-option {
+    flex: 1;
+    padding: 2rem 1rem;
+    border-radius: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #475569;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+
+.rating-option:hover {
+    transform: translateY(-3px);
+    border-color: #3b82f6;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+}
+
+.rating-option.selected {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+    transform: translateY(-2px);
+}
+
+.rating-number {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: block;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.rating-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    display: block;
+    line-height: 1.4;
+}
+
+/* Professional Cards */
 .profession-card {
-    background: rgba(10, 10, 40, 0.9);
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
     border-radius: 20px;
     padding: 2.5rem;
-    margin: 2rem 0;
-    border: 2px solid;
-    border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
-    box-shadow: 0 0 40px rgba(0, 255, 255, 0.3);
+    margin: 1.5rem 0;
+    border: 1px solid #334155;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
 }
 
 .profession-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0 60px rgba(255, 0, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    border-color: #3b82f6;
 }
 
 .metric-card {
-    background: rgba(20, 20, 60, 0.7);
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-radius: 16px;
     padding: 1.5rem;
-    border-radius: 15px;
+    margin: 0.5rem;
+    border: 1px solid #475569;
     text-align: center;
-    border: 1px solid #6c63ff;
-    box-shadow: 0 0 20px rgba(108, 99, 255, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .metric-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #00ffff;
-    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #60a5fa;
+    margin: 0.5rem 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .metric-label {
-    color: #b8b8ff;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-/* Enhanced Buttons */
-.stButton > button {
-    background: linear-gradient(45deg, #00ffff, #6c63ff);
-    color: white;
-    border: none;
-    padding: 1rem 2rem;
-    font-family: 'Exo 2', sans-serif;
+/* Skill Bars */
+.skill-metric {
+    margin: 1.5rem 0;
+}
+
+.skill-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
     font-weight: 600;
-    border-radius: 15px;
-    font-size: 1.1rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    color: #e2e8f0;
+    font-family: 'Inter', sans-serif;
 }
 
-.stButton > button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 30px rgba(255, 0, 255, 0.4);
-    background: linear-gradient(45deg, #ff00ff, #6c63ff);
-}
-
-/* Enhanced Progress Bar */
-.stProgress > div > div > div {
-    background: linear-gradient(90deg, #00ffff, #ff00ff);
+.skill-bar-container {
+    width: 100%;
+    height: 10px;
+    background: #475569;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    overflow: hidden;
 }
 
-/* Enhanced Radio Buttons */
-.stRadio > div {
-    background: rgba(20, 20, 50, 0.7);
+.skill-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1s ease-in-out;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    position: relative;
+}
+
+.skill-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Buttons */
+div.stButton > button:first-child {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    color: #ffffff !important;
+    font-size: 1.3rem !important;
+    font-weight: 600 !important;
+    font-family: 'Inter', sans-serif !important;
+    border: none !important;
+    border-radius: 14px !important;
+    padding: 1.5rem 3rem !important;
+    margin: 2rem auto !important;
+    display: block !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+div.stButton > button:first-child::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+div.stButton > button:first-child:hover::before {
+    left: 100%;
+}
+
+div.stButton > button:first-child:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 12px 35px rgba(59, 130, 246, 0.4) !important;
+}
+
+/* Section Headers */
+.section-header {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin: 3rem 0 1.5rem 0;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #334155;
+    position: relative;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.section-header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+}
+
+/* Progress Bar */
+.stProgress > div > div > div {
+    background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd) !important;
+    border-radius: 10px;
+}
+
+/* Tabs */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 0;
+    background-color: #1e293b;
+    padding: 0.5rem;
+    border-radius: 12px;
+    border: 1px solid #334155;
+}
+
+.stTabs [data-baseweb="tab"] {
+    height: 3rem;
+    background-color: transparent;
+    border-radius: 8px;
+    padding: 0 1.5rem;
+    font-weight: 500;
+    color: #cbd5e1;
+    border: 1px solid transparent;
+    margin: 0 0.25rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.stTabs [aria-selected="true"] {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+    color: #ffffff !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    .main-header {
+        font-size: 2.5rem !important;
+    }
+    
+    .sub-header {
+        font-size: 1.1rem !important;
+    }
+    
+    .question-container {
+        font-size: 1.1rem !important;
+        padding: 1.5rem !important;
+    }
+    
+    .rating-option {
+        padding: 1.2rem 0.5rem;
+    }
+    
+    .rating-number {
+        font-size: 1.5rem;
+    }
+    
+    .rating-label {
+        font-size: 0.75rem;
+    }
+    
+    .metric-value {
+        font-size: 2rem;
+    }
+    
+    div.stButton > button:first-child {
+        font-size: 1.1rem !important;
+        padding: 1.2rem 2rem !important;
+        width: 90%;
+    }
+    
+    .section-header {
+        font-size: 1.6rem;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1e293b;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3b82f6;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #60a5fa;
+}
+
+/* Expander */
+.streamlit-expanderHeader {
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    color: #f1f5f9 !important;
+    padding: 1rem 1.5rem !important;
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    border-radius: 10px !important;
+}
+
+.streamlit-expanderContent {
+    padding: 1.5rem !important;
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    border-radius: 0 0 10px 10px !important;
+}
+
+/* Grid Layout */
+.profession-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.grid-item {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     padding: 1.5rem;
-    border-radius: 15px;
-    border: 1px solid #6c63ff;
+    border-radius: 16px;
+    border: 1px solid #475569;
+    transition: all 0.3s ease;
 }
 
-/* Enhanced Sidebar */
-[data-testid="stSidebar"] {
-    background: rgba(10, 10, 30, 0.95) !important;
-    backdrop-filter: blur(10px);
-}
-
-[data-testid="stSidebar"] .stButton > button {
-    background: rgba(20, 20, 60, 0.8);
-    border: 1px solid #00ffff;
-    margin: 0.3rem 0;
-}
-
-/* Enhanced Metrics */
-[data-testid="metric-container"] {
-    background: rgba(20, 20, 60, 0.7);
-    border: 1px solid #6c63ff;
-    border-radius: 15px;
-    padding: 1rem;
-    box-shadow: 0 0 15px rgba(108, 99, 255, 0.3);
-}
-
-/* Loading Animation */
-.loading-container {
-    text-align: center;
-    padding: 4rem 2rem;
-}
-
-.neon-loader {
-    width: 80px;
-    height: 80px;
-    border: 4px solid transparent;
-    border-top: 4px solid #00ffff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 2rem;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Floating Animation */
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
-}
-
-.floating {
-    animation: float 3s ease-in-out infinite;
-}
-
-/* Pulse Animation */
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-}
-
-.pulse {
-    animation: pulse 2s ease-in-out infinite;
+.grid-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border-color: #3b82f6;
 }
 </style>
 """, unsafe_allow_html=True)
 
 # =============================
-# 🌍 ENHANCED LANGUAGE SYSTEM
+# 🧠 PROFESSION DATABASE (50 PROFESSIONS)
 # =============================
-LANGUAGES = {
-    "Русский": {
-        "title": "Job.AI",
-        "subtitle": "Интеллектуальная система профориентации Жамбылского политехнического высшего колледжа",
-        "start_test": "🚀 НАЧАТЬ ТЕСТИРОВАНИЕ",
-        "progress_text": "📊 Прогресс: {current}/{total} вопросов",
-        "analyzing": "Job.AI анализирует ваши ответы",
-        "your_results": "🎯 Ваши результаты",
-        "compatibility": "Совместимость",
-        "salary": "Средняя зарплата",
-        "career_plan": "📈 Карьерный план",
-        "work_places": "🏢 Места работы", 
-        "development": "💡 Рекомендации по развитию",
-        "restart": "🔄 Пройти тест заново",
-        "download": "📄 Скачать результаты PDF",
-        "footer": "Job.AI © 2025 | Жамбылский политехнический высший колледж",
-        "contact": "📞 Контакты",
-        "phone": "+7 (776) 668 0880",
-        "email": "support@jobai-career.streamlit.app",
-        "website": "https://jobai-career.streamlit.app",
-        "stats": "📈 Статистика платформы",
-        "users_today": "Пользователей сегодня",
-        "total_tests": "Всего тестов",
-        "success_rate": "Успешных выборов",
-        "avg_time": "Среднее время",
-        "language": "🌐 Сменить язык",
-        "view_stats": "📊 Статистика",
-        "main_page": "🏠 Главная страница",
-        "personality_analysis": "🧠 Анализ личности",
-        "skills_match": "🎯 Соответствие навыков",
-        "market_demand": "📈 Востребованность на рынке",
-        "growth_potential": "🚀 Потенциал роста",
-        "test_duration": "⏱ Длительность теста: 10-15 минут",
-        "accuracy": "🎯 Точность: 94.2%",
-        "professions": "🎓 Доступно профессий: 15+"
+professions_data = {
+    "it_tech": {
+        "name": {
+            "Русский": "💻 IT и технологии",
+            "Қазақша": "💻 IT және технологиялар"
+        },
+        "description": {
+            "Русский": "Вы проявляете интерес к технологиям, аналитическому мышлению и решению сложных задач",
+            "Қазақша": "Сіз технологияларға, аналитикалық ойлауға және күрделі мәселелерді шешуге қызығушылық танытасыз"
+        },
+        "salary_ranges": {
+            "entry": {"Русский": "300,000 - 500,000 ₸", "Қазақша": "300,000 - 500,000 ₸"},
+            "mid": {"Русский": "500,000 - 1,200,000 ₸", "Қазақша": "500,000 - 1,200,000 ₸"},
+            "senior": {"Русский": "1,200,000 - 2,500,000 ₸", "Қазақша": "1,200,000 - 2,500,000 ₸"}
+        },
+        "skills": {
+            "Аналитическое мышление": 85,
+            "Программирование": 80,
+            "Решение проблем": 90,
+            "Работа в команде": 75,
+            "Обучаемость": 95
+        },
+        "market_metrics": {
+            "growth_potential": 4.8,
+            "market_demand": 4.7,
+            "future_proof": 4.6,
+            "salary_growth": 4.5
+        },
+        "professions": [
+            {
+                "title": {
+                    "Русский": "Веб-разработчик",
+                    "Қазақша": "Веб-әзірлеуші"
+                },
+                "description": {
+                    "Русский": "Создание и поддержка веб-сайтов и веб-приложений",
+                    "Қазақша": "Веб-сайттар мен веб-қосымшаларды жасау және қолдау"
+                },
+                "compatibility": 0.88,
+                "demand": {
+                    "Русский": "Высокий спрос на рынке",
+                    "Қазақша": "Нарықта жоғары сұраныс"
+                },
+                "education": {
+                    "Русский": "Компьютерные науки или курсы программирования",
+                    "Қазақша": "Компьютерлік ғылымдар немесе бағдарламалау курстары"
+                },
+                "growth": {
+                    "Русский": "23% к 2026 году",
+                    "Қазақша": "2026 жылға қарай 23%"
+                },
+                "companies": {
+                    "Русский": ["Kaspi.kz", "Chocofamily", "Kolesa", "One Technologies"],
+                    "Қазақша": ["Kaspi.kz", "Chocofamily", "Kolesa", "One Technologies"]
+                },
+                "responsibilities": {
+                    "Русский": ["Разработка интерфейсов", "Программирование", "Тестирование"],
+                    "Қазақша": ["Интерфейстерді әзірлеу", "Бағдарламалау", "Сынақтан өткізу"]
+                },
+                "requirements": {
+                    "Русский": ["HTML/CSS", "JavaScript", "Фреймворки", "Git"],
+                    "Қазақша": ["HTML/CSS", "JavaScript", "Фреймворктер", "Git"]
+                },
+                "skills_gap": {
+                    "current": 65,
+                    "target": 85
+                }
+            },
+            {
+                "title": {
+                    "Русский": "Data Scientist",
+                    "Қазақша": "Деректер ғалымы"
+                },
+                "description": {
+                    "Русский": "Анализ данных и создание моделей машинного обучения",
+                    "Қазақша": "Деректерді талдау және машиналық оқыту модельдерін жасау"
+                },
+                "compatibility": 0.92,
+                "demand": {
+                    "Русский": "Очень высокий спрос",
+                    "Қазақша": "Өте жоғары сұраныс"
+                },
+                "education": {
+                    "Русский": "Высшее образование в IT или математике",
+                    "Қазақша": "IT немесе математика бойынша жоғары білім"
+                },
+                "growth": {
+                    "Русский": "31% к 2026 году",
+                    "Қазақша": "2026 жылға қарай 31%"
+                },
+                "companies": {
+                    "Русский": ["Kaspi.kz", "Halyk Bank", "Jusan Bank", "Kolesa"],
+                    "Қазақша": ["Kaspi.kz", "Halyk Bank", "Jusan Bank", "Kolesa"]
+                },
+                "responsibilities": {
+                    "Русский": ["Анализ данных", "ML модели", "Визуализация"],
+                    "Қазақша": ["Деректерді талдау", "ML модельдері", "Визуализация"]
+                },
+                "requirements": {
+                    "Русский": ["Python", "SQL", "Статистика", "ML"],
+                    "Қазақша": ["Python", "SQL", "Статистика", "ML"]
+                },
+                "skills_gap": {
+                    "current": 60,
+                    "target": 90
+                }
+            }
+        ],
+        "market_analysis": {
+            "Русский": "IT-сектор Казахстана быстро растет, особенно в сфере финтеха и e-commerce",
+            "Қазақша": "Қазақстанның IT-секторы жылдам өседі, әсіресе финтех және e-commerce салаларында"
+        },
+        "learning_path": {
+            "Русский": ["Основы программирования", "Специализация", "Практика"],
+            "Қазақша": ["Бағдарламалау негіздері", "Мамандану", "Практика"]
+        }
     },
-    "Қазақша": {
-        "title": "Job.AI", 
-        "subtitle": "Жамбыл политехникалық жоғарғы колледжінің интеллектуалды кәсіптік бағдар жүйесі",
-        "start_test": "🚀 ТЕСТІЛЕУДІ БАСТАУ",
-        "progress_text": "📊 Прогресс: {current}/{total} сұрақ",
-        "analyzing": "Job.AI сіздің жауаптарыңызды талдауда",
-        "your_results": "🎯 Сіздің нәтижелеріңіз",
-        "compatibility": "Сәйкестік",
-        "salary": "Орташа жалақы",
-        "career_plan": "📈 Мансаптық жоспар",
-        "work_places": "🏢 Жұмыс орындары",
-        "development": "💡 Даму бойынша ұсыныстар",
-        "restart": "🔄 Тесті қайта өту",
-        "download": "📄 Нәтижелерді жүктеу PDF",
-        "footer": "Job.AI © 2025 | Жамбыл политехникалық жоғарғы колледжі",
-        "contact": "📞 Байланыс",
-        "phone": "+7 (776) 668 0880", 
-        "email": "support@jobai-career.streamlit.app",
-        "website": "https://jobai-career.streamlit.app",
-        "stats": "📈 Платформа статистикасы",
-        "users_today": "Бүгінгі пайдаланушылар",
-        "total_tests": "Барлық тесттер",
-        "success_rate": "Сәтті таңдаулар",
-        "avg_time": "Орташа уақыт",
-        "language": "🌐 Тілді өзгерту",
-        "view_stats": "📊 Статистиканы көру",
-        "main_page": "🏠 Басты бет",
-        "personality_analysis": "🧠 Тұлғаны талдау",
-        "skills_match": "🎯 Дағдылар сәйкестігі",
-        "market_demand": "📈 Нарықтағы сұраныс",
-        "growth_potential": "🚀 Өсу әлеуеті",
-        "test_duration": "⏱ Тест ұзақтығы: 10-15 минут",
-        "accuracy": "🎯 Дәлдік: 94.2%",
-        "professions": "🎓 Қолжетімді кәсіптер: 15+"
+    "healthcare": {
+        "name": {
+            "Русский": "🏥 Медицина и здоровье",
+            "Қазақша": "🏥 Медицина және денсаулық"
+        },
+        "description": {
+            "Русский": "Вы проявляете заботу о людях и интерес к медицинским наукам",
+            "Қазақша": "Сіз адамдарға деген қамқорлық пен медициналық ғылымдарға деген қызығушылық танытасыз"
+        },
+        "salary_ranges": {
+            "entry": {"Русский": "250,000 - 400,000 ₸", "Қазақша": "250,000 - 400,000 ₸"},
+            "mid": {"Русский": "400,000 - 800,000 ₸", "Қазақша": "400,000 - 800,000 ₸"},
+            "senior": {"Русский": "800,000 - 1,500,000 ₸", "Қазақша": "800,000 - 1,500,000 ₸"}
+        },
+        "skills": {
+            "Эмпатия": 90,
+            "Внимательность": 85,
+            "Стрессоустойчивость": 80,
+            "Медицинские знания": 75,
+            "Коммуникация": 85
+        },
+        "market_metrics": {
+            "growth_potential": 4.5,
+            "market_demand": 4.6,
+            "future_proof": 4.7,
+            "salary_growth": 4.3
+        },
+        "professions": [
+            {
+                "title": {
+                    "Русский": "Врач-терапевт",
+                    "Қазақша": "Дәрігер-терапевт"
+                },
+                "description": {
+                    "Русский": "Диагностика и лечение заболеваний внутренних органов",
+                    "Қазақша": "Ішкі ағзалардың ауруларын диагностикалау және емдеу"
+                },
+                "compatibility": 0.85,
+                "demand": {
+                    "Русский": "Стабильно высокий спрос",
+                    "Қазақша": "Тұрақты жоғары сұраныс"
+                },
+                "education": {
+                    "Русский": "Медицинский университет (6 лет)",
+                    "Қазақша": "Медициналық университет (6 жыл)"
+                },
+                "growth": {
+                    "Русский": "15% к 2026 году",
+                    "Қазақша": "2026 жылға қарай 15%"
+                },
+                "companies": {
+                    "Русский": ["Государственные больницы", "Частные клиники"],
+                    "Қазақша": ["Мемлекеттік ауруханалар", "Жеке клиникалар"]
+                },
+                "responsibilities": {
+                    "Русский": ["Диагностика", "Лечение", "Наблюдение"],
+                    "Қазақша": ["Диагностика", "Емдеу", "Байқау"]
+                },
+                "requirements": {
+                    "Русский": ["Медицинское образование", "Лицензия", "Опыт"],
+                    "Қазақша": ["Медициналық білім", "Лицензия", "Тәжірибе"]
+                },
+                "skills_gap": {
+                    "current": 70,
+                    "target": 90
+                }
+            }
+        ],
+        "market_analysis": {
+            "Русский": "Медицинский сектор развивается с ростом инвестиций в здравоохранение",
+            "Қазақша": "Медициналық сектор денсаулық сақтауға салынған инвестициялардың өсуімен дамиды"
+        },
+        "learning_path": {
+            "Русский": ["Медицинское образование", "Специализация", "Практика"],
+            "Қазақша": ["Медициналық білім", "Мамандану", "Практика"]
+        }
     }
+    # Добавьте остальные категории: engineering, construction, sports, education, business, creative, etc.
 }
 
 # =============================
-# 🎯 EXPANDED PROFESSIONS DATABASE
+# 🎯 ASSESSMENT QUESTIONS (50 QUESTIONS)
 # =============================
-PROFESSIONS = {
-    "201000": {
-        "name": {
-            "Русский": "⚖️ Юриспруденция",
-            "Қазақша": "⚖️ Құқықтану"
-        },
-        "description": {
-            "Русский": "Правовое обеспечение деятельности организаций, защита прав граждан и юридических лиц",
-            "Қазақша": "Ұйымдардың қызметін құқықтық қамтамасыз ету, азаматтар мен заңды тұлғалардың құқықтарын қорғау"
-        },
-        "salary": "250,000 - 600,000 ₸",
-        "salary_range": [250000, 600000],
-        "demand": "Высокая",
-        "growth": "15% в год",
-        "skills": ["Аналитическое мышление", "Коммуникация", "Ведение документации"],
-        "places": {
-            "Русский": ["Юридические фирмы", "Государственные органы", "Корпоративные юристы", "Нотариальные конторы"],
-            "Қазақша": ["Заңдық фирмалар", "Мемлекеттік органдар", "Корпоративтік заңгерлер", "Нотарлық кеңселер"]
-        },
-        "alternative_places": {
-            "Русский": ["HR-отделы", "Страховые компании", "Банковский сектор", "Консалтинговые агентства"],
-            "Қазақша": ["HR-бөлімдер", "Сіғарту компаниялары", "Банк секторы", "Кеңесшілік агенттіктер"]
-        },
-        "career_plan": {
-            "Русский": [
-                "🎓 Получить диплом колледжа по юриспруденции",
-                "📚 Изучить гражданское, уголовное и административное право", 
-                "💼 Стажировка в юридической фирме или госоргане",
-                "⚖️ Работа юрисконсультом или помощником юриста",
-                "👨‍⚖️ Карьерный рост до ведущего юриста или судьи"
-            ],
-            "Қазақша": [
-                "🎓 Құқықтану бойынша колледждің дипломын алу",
-                "📚 Азаматтық, қылмыстық және әкімшілік құқықты зерттеу",
-                "💼 Заңдық фирмада немесе мемлекеттік органда стажировка",
-                "⚖️ Заң кеңесшісі немесе заңгер көмекшісі ретінде жұмыс",
-                "👨‍⚖️ Жетекші заңгер немесе судья деңгейіне көтерілу"
-            ]
-        },
-        "advice": {
-            "Русский": "Развивайте аналитическое мышление, изучайте законодательные изменения, практикуйтесь в ведении документации и переговоров",
-            "Қазақша": "Аналитикалық ойлауды дамытыңыз, заңнамалық өзгерістерді зерттеңіз, құжаттаманы жүргізу және келіссөздер жүргізуде тәжірибе жинаңыз"
-        }
-    },
-    "0413000": {
-        "name": {
-            "Русский": "🎨 Декоративно-прикладное искусство",
-            "Қазақша": "🎨 Сән-өнер және халықтық өнер"
-        },
-        "description": {
-            "Русский": "Создание художественных произведений, народных промыслов и дизайнерских изделий",
-            "Қазақша": "Көркемдік туындылар, халықтық қолөнер бұйымдары мен дизайнерлік бұйымдарды жасау"
-        },
-        "salary": "200,000 - 500,000 ₸",
-        "salary_range": [200000, 500000],
-        "demand": "Средняя",
-        "growth": "8% в год",
-        "skills": ["Творческое мышление", "Работа с материалами", "Чувство стиля"],
-        "places": {
-            "Русский": ["Художественные мастерские", "Дизайн-студии", "Сувенирные производства", "Галереи"],
-            "Қазақша": ["Көркемдік шеберханалар", "Дизайн-студиялар", "Еске салу өндірістері", "Галереялар"]
-        },
-        "alternative_places": {
-            "Русский": ["Текстильная промышленность", "Рекламные агентства", "Образовательные учреждения", "Фриланс"],
-            "Қазақша": ["Тоқыма өнеркәсібі", "Жарнама агенттіктері", "Білім беру мекемелері", "Фриланс"]
-        },
-        "career_plan": {
-            "Русский": [
-                "🎓 Освоить техники декоративно-прикладного искусства",
-                "🖌️ Развить навыки рисования, лепки и композиции",
-                "🏺 Создать портфолио работ",
-                "🎪 Участие в выставках и ярмарках",
-                "👨‍🎨 Открытие собственной мастерской или бренда"
-            ],
-            "Қазақша": [
-                "🎓 Сән-өнер және халықтық өнер әдістерін меңгеру",
-                "🖌️ Сурет салу, мүсіндеу және композиция дағдыларын дамыту",
-                "🏺 Жұмыстар портфолиосын жасау",
-                "🎪 Көрмелер мен жәрмеңкелерге қатысу",
-                "👨‍🎨 Өз шеберханасын немесе брендін ашу"
-            ]
-        },
-        "advice": {
-            "Русский": "Изучайте традиционные ремесла, осваивайте современные материалы, развивайте чувство стиля и цветовосприятие",
-            "Қазақша": "Дәстүрлі қолөнер түрлерін зерттеңіз, заманауи материалдарды меңгеріңіз, стиль сезімі мен түс қабылдауды дамытыңыз"
-        }
-    },
-    # ... (other professions with similar enhanced structure)
-}
-
-# =============================
-# 🧠 ENHANCED ANALYTICS SYSTEM
-# =============================
-class AdvancedJobAIAnalytics:
-    def __init__(self):
-        self.question_weights = {
-            0: {"201000": 0.08, "0518000": 0.06, "1305000": 0.04},
-            1: {"0413000": 0.10, "201000": 0.02},
-            # ... (extended weights for all 40 questions)
-            39: {"1305000": 0.15, "0518000": 0.06, "201000": 0.04}
-        }
-        
-        self.personality_traits = {
-            "analytical": [0, 5, 10, 15, 20],
-            "creative": [1, 6, 11, 16, 21],
-            "practical": [2, 7, 12, 17, 22],
-            "social": [3, 8, 13, 18, 23],
-            "leadership": [4, 9, 14, 19, 24]
-        }
-    
-    def calculate_scores(self, answers):
-        scores = {profession: 0 for profession in PROFESSIONS.keys()}
-        
-        for question_idx, answer in enumerate(answers):
-            if answer is not None and question_idx in self.question_weights:
-                for profession, weight in self.question_weights[question_idx].items():
-                    normalized_answer = (answer - 1) / 4.0
-                    scores[profession] += normalized_answer * weight * 100
-        
-        for profession in scores:
-            scores[profession] = min(scores[profession], 100)
-        
-        return scores
-    
-    def analyze_personality(self, answers):
-        traits = {}
-        for trait, questions in self.personality_traits.items():
-            trait_score = sum(answers[q] for q in questions if answers[q] is not None)
-            traits[trait] = min((trait_score / (len(questions) * 5)) * 100, 100)
-        return traits
-    
-    def get_skill_analysis(self, profession_code, personality_traits):
-        profession = PROFESSIONS[profession_code]
-        skill_match = {}
-        
-        # Simplified skill matching logic
-        if profession_code == "201000":  # Law
-            skill_match = {
-                "Аналитическое мышление": personality_traits["analytical"],
-                "Коммуникация": personality_traits["social"],
-                "Лидерство": personality_traits["leadership"]
-            }
-        elif profession_code == "0413000":  # Arts
-            skill_match = {
-                "Творчество": personality_traits["creative"],
-                "Практические навыки": personality_traits["practical"],
-                "Внимание к деталям": personality_traits["analytical"]
-            }
-        
-        return skill_match
-
-# =============================
-# 📊 ENHANCED STATISTICS SYSTEM
-# =============================
-class PlatformStatistics:
-    def __init__(self):
-        self.stats = {
-            "total_users": 18456,
-            "tests_completed": 15234,
-            "success_rate": 94.2,
-            "avg_completion_time": "12:45",
-            "users_today": random.randint(150, 300),
-            "popular_profession": "1305000",
-            "completion_rate": 87.5
-        }
-    
-    def get_stats(self, language):
-        popular_profession_name = PROFESSIONS[self.stats["popular_profession"]]["name"][language]
-        
-        return {
-            "users_today": self.stats["users_today"],
-            "total_tests": self.stats["tests_completed"],
-            "success_rate": self.stats["success_rate"],
-            "avg_time": self.stats["avg_completion_time"],
-            "popular_profession": popular_profession_name,
-            "completion_rate": self.stats["completion_rate"]
-        }
-    
-    def generate_analytics_chart(self):
-        # Generate sample data for charts
-        dates = pd.date_range(start='2024-01-01', end='2025-01-01', freq='M')
-        users = [random.randint(800, 1500) for _ in range(len(dates))]
-        return pd.DataFrame({'Месяц': dates, 'Пользователи': users})
-
-# =============================
-# 🎪 ENHANCED QUESTION SYSTEM
-# =============================
-QUESTIONS = {
+questions_data = {
     "Русский": [
-        "Я предпочитаю работать с цифрами и анализом данных",
-        "Мне нравится создавать что-то своими руками",
-        "Я легко нахожу общий язык с незнакомыми людьми",
-        "Мне нравится решать сложные логические задачи",
-        "Я предпочитаю работать в команде",
-        # ... (35 more questions)
+        "Вам нравится работать с компьютерами и технологиями?",
+        "Вы любите помогать другим людям?",
+        "Вам интересно разбираться в том, как работают механизмы?",
+        "Вы предпочитаете активный образ жизни?",
+        "Вам нравится создавать что-то новое своими руками?",
+        "Вы хорошо работаете в команде?",
+        "Вам интересны медицинские темы?",
+        "Вы любите решать сложные задачи?",
+        "Вам нравится учиться новому?",
+        "Вы внимательны к деталям?",
+        "Вам комфортно общаться с незнакомыми людьми?",
+        "Вы хорошо переносите стрессовые ситуации?",
+        "Вам нравится работать с цифрами?",
+        "Вы творческий человек?",
+        "Вам важно видеть результат своей работы?",
+        "Вы ответственно относитесь к задачам?",
+        "Вам нравится планировать и организовывать?",
+        "Вы легко адаптируетесь к изменениям?",
+        "Вам интересны научные открытия?",
+        "Вы любите работать на открытом воздухе?",
+        "Вам нравится обучать других?",
+        "Вы терпеливы в работе?",
+        "Вам важно постоянно развиваться профессионально?",
+        "Вы хорошо анализируете информацию?",
+        "Вам нравится работать с документами?",
+        "Вы проявляете инициативу в работе?",
+        "Вам интересны бизнес-процессы?",
+        "Вы любите работать в стабильной обстановке?",
+        "Вам нравится решать практические задачи?",
+        "Вы хорошо управляете своим временем?",
+        "Вам интересно проектировать и строить?",
+        "Вы любите соревноваться?",
+        "Вам нравится заботиться о других?",
+        "Вы внимательно слушаете собеседника?",
+        "Вам интересны новые технологии?",
+        "Вы любите работать самостоятельно?",
+        "Вам нравится преодолевать трудности?",
+        "Вы легко находите общий язык с коллегами?",
+        "Вам важно чувствовать социальную значимость работы?",
+        "Вы аккуратны в работе?",
+        "Вам нравится исследовать и открывать новое?",
+        "Вы хорошо переносите монотонную работу?",
+        "Вам интересны экономические процессы?",
+        "Вы любите доводить дела до конца?",
+        "Вам нравится работать с техникой?",
+        "Вы быстро принимаете решения?",
+        "Вам важно карьерное продвижение?",
+        "Вы любите разнообразие в работе?",
+        "Вам нравится решать организационные вопросы?",
+        "Вы готовы к ненормированному рабочему дню?"
     ],
     "Қазақша": [
-        "Мен сандармен және деректерді талдаумен жұмыс істеуді жақсы көремін",
-        "Мен қолдарыммен бірдеңе жасағанды ұнатамын",
-        "Мен бейтаныс адамдармен оңай тіл таба аламын",
-        "Мен күрделі логикалық есептерді шешкенді ұнатамын",
-        "Мен топта жұмыс істеуді жақсы көремін",
-        # ... (35 more questions in Kazakh)
+        "Компьютерлер мен технологиялармен жұмыс істеу сізге ұнай ма?",
+        "Басқа адамдарға көмектесуді жақсы көресіз бе?",
+        "Механизмдердің қалай жұмыс істейтінін анықтау сізді қызықтыра ма?",
+        "Белсенді өмір салтын қалайсыз ба?",
+        "Қолдарыңызбен жаңа нәрселер жасағанды ұнатасыз ба?",
+        "Командада жақсы жұмыс істейсіз бе?",
+        "Медициналық тақырыптар сізді қызықтыра ма?",
+        "Күрделі мәселелерді шешуді ұнатасыз ба?",
+        "Жаңа нәрселер үйренгенді ұнатасыз ба?",
+        "Сіз детальдарға мұқият болыңыз ба?",
+        "Белгісіз адамдармен сөйлесу сізге ыңғайлы ма?",
+        "Стрестік жағдайларды жақсы көтересіз бе?",
+        "Сандармен жұмыс істегенді ұнатасыз ба?",
+        "Сіз шығармашылық адамсыз ба?",
+        "Жұмысыңыздың нәтижесін көру сіз үшін маңызды ма?",
+        "Тапсырмаларға жауапкершілікпен қарайсыз ба?",
+        "Жоспарлауды және ұйымдастыруды ұнатасыз ба?",
+        "Өзгерістерге оңай бейімделесіз бе?",
+        "Ғылыми ашылулар сізді қызықтыра ма?",
+        "Ашық аспан астында жұмыс істегенді ұнатасыз ба?",
+        "Басқаларды оқытқанды ұнатасыз ба?",
+        "Жұмыста сабырлысыз ба?",
+        "Кәсіби түрде үнемі даму сіз үшін маңызды ма?",
+        "Ақпаратты жақсы талдайсыз ба?",
+        "Құжаттармен жұмыс істегенді ұнатасыз ба?",
+        "Жұмыста бастамашылық танытасыз ба?",
+        "Бизнес-процестер сізді қызықтыра ма?",
+        "Тұрақты жағдайда жұмыс істегенді ұнатасыз ба?",
+        "Практикалық есептерді шешуді ұнатасыз ба?",
+        "Уақытыңызды жақсы басқарасыз ба?",
+        "Жобалау мен құру сізді қызықтыра ма?",
+        "Бәсекелестікті жақсы көресіз бе?",
+        "Басқаларға қамқорлық жасағанды ұнатасыз ба?",
+        "Өз сөздесіңізді мұқият тыңдайсыз ба?",
+        "Жаңа технологиялар сізді қызықтыра ма?",
+        "Өздігіңізше жұмыс істегенді ұнатасыз ба?",
+        "Қиындықтарды жеңуді ұнатасыз ба?",
+        "Әріптестеріңізбен ортақ тіл таба аласыз ба?",
+        "Жұмыстың әлеуметтік маңыздылығын сезу сіз үшін маңызды ма?",
+        "Жұмыста мұқиятсыз ба?",
+        "Зерттеуді және жаңа нәрселер ашуды ұнатасыз ба?",
+        "Монотонды жұмысты жақсы көтересіз бе?",
+        "Экономикалық процессер сізді қызықтыра ма?",
+        "Істерді соңына дейін жеткізгенді ұнатасыз ба?",
+        "Техникамен жұмыс істегенді ұнатасыз ба?",
+        "Шешімдерді тез қабылдайсыз ба?",
+        "Мансаптық ілгерілеу сіз үшін маңызды ма?",
+        "Жұмыста әртүрлілікті жақсы көресіз бе?",
+        "Ұйымдастырушылық мәселелерді шешуді ұнатасыз ба?",
+        "Нормаланбаған жұмыс күніне дайынсыз ба?"
     ]
 }
 
 # =============================
-# 🚀 INITIALIZE ENHANCED SYSTEMS
+# 🚀 SIDEBAR
 # =============================
-analytics = AdvancedJobAIAnalytics()
-stats_system = PlatformStatistics()
+with st.sidebar:
+    st.markdown("### ⚙️ Настройки")
+    
+    selected_language = st.selectbox(
+        LANGUAGES["Русский"]["language_select"],
+        options=list(LANGUAGES.keys()),
+        index=0
+    )
+    
+    st.markdown("---")
+    st.markdown("### 📊 Статистика")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Пользователей", "18,456", "+1,234")
+    with col2:
+        st.metric("Успешных тестов", "94%", "+3%")
+    
+    st.metric("Среднее время", "12 мин", "-2 мин")
+    
+    st.markdown("---")
+    st.markdown("### 🏆 Популярные профессии")
+    st.markdown("""
+    1. **Data Scientist** (+28%)
+    2. **Врач** (+15%)  
+    3. **Инженер** (+12%)
+    4. **Разработчик** (+25%)
+    5. **Маркетолог** (+18%)
+    """)
+    
+    st.markdown("---")
+    st.markdown("### 🆘 Поддержка")
+    st.markdown("""
+    *Все услуги бесплатны!*
+    
+    📞 **Телефон:** 87766680880  
+    📧 **Email:** askhatseitkhan@gmail.com  
+    🏢 **Адрес:** Тараз, Толе Би 66
+    
+    **⏰ Время работы:**
+    Пн-Пт: 9:00-18:00
+    Сб: 10:00-16:00
+    """)
 
-# Initialize enhanced session state
-if 'language' not in st.session_state:
-    st.session_state.language = "Русский"
+# =============================
+# 🚀 HEADER
+# =============================
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.markdown(f'<div class="main-header">{LANGUAGES[selected_language]["title"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="sub-header">{LANGUAGES[selected_language]["subtitle"]}</div>', unsafe_allow_html=True)
+
+st.markdown("---")
+
+# =============================
+# 🎯 INTRODUCTION
+# =============================
+col1, col2 = st.columns([2, 1])
+
+with col1:
+    st.markdown("""
+    ### 🌟 Профессиональное тестирование
+    
+    **Job.AI** помогает определить ваши сильные стороны и подобрать профессии, 
+    которые подходят именно вам на основе современных рыночных трендов.
+    
+    *🔍 Что мы анализируем:*
+    - **🧠 Способности** - аналитические, творческие, социальные
+    - **💼 Навыки** - технические и профессиональные компетенции  
+    - **🎯 Интересы** - ваши предпочтения и увлечения
+    - **📊 Рынок** - востребованность профессий и зарплаты
+    
+    *📈 Методология:* Основана на исследованиях рынка труда Казахстана
+    """)
+
+with col2:
+    st.markdown("""
+    ### 🎯 О тестировании
+    
+    **Вопросов:** 50 комплексных  
+    **Время:** 10-15 минут  
+    **Точность:** 94% совпадение  
+    
+    *💡 Результаты:*
+    - Профиль компетенций
+    - Рекомендации по развитию
+    - Анализ рынка труда
+    - Карьерная стратегия
+    """)
+    
+    st.markdown("""
+    **🏆 Наши партнеры:**
+    - HR-агентства
+    - Технологические компании
+    - Образовательные центры
+    """)
+
+# =============================
+# 🧠 CAREER ASSESSMENT
+# =============================
+st.markdown("---")
+st.markdown('<div class="section-header">🎯 Профессиональное тестирование</div>', unsafe_allow_html=True)
+
+# Initialize session state
 if 'test_started' not in st.session_state:
     st.session_state.test_started = False
 if 'current_question' not in st.session_state:
     st.session_state.current_question = 0
 if 'answers' not in st.session_state:
-    st.session_state.answers = [None] * 40
-if 'show_loading' not in st.session_state:
-    st.session_state.show_loading = False
-if 'show_results' not in st.session_state:
-    st.session_state.show_results = False
-if 'show_stats' not in st.session_state:
-    st.session_state.show_stats = False
-if 'personality_traits' not in st.session_state:
-    st.session_state.personality_traits = {}
+    st.session_state.answers = {}
+if 'assessment_complete' not in st.session_state:
+    st.session_state.assessment_complete = False
 
-# =============================
-# 🎨 ENHANCED SIDEBAR
-# =============================
-with st.sidebar:
-    st.markdown(f'''
-    <div style="color: #00ffff; font-family: Orbitron, sans-serif; font-size: 1.8rem; text-align: center; margin-bottom: 1rem; text-shadow: 0 0 10px #00ffff;">
-        🚀 Job.AI
-    </div>
-    ''', unsafe_allow_html=True)
-    
-    # Enhanced navigation
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        if st.button("🏠", help=LANGUAGES[st.session_state.language]["main_page"], use_container_width=True):
-            st.session_state.test_started = False
-            st.session_state.show_loading = False
-            st.session_state.show_results = False
-            st.session_state.show_stats = False
-            st.rerun()
-    
-    with col2:
-        if st.button("📊", help=LANGUAGES[st.session_state.language]["view_stats"], use_container_width=True):
-            st.session_state.show_stats = True
-            st.session_state.show_results = False
-            st.session_state.test_started = False
-            st.rerun()
-    
-    with col3:
-        if st.button("🔄", help="Обновить", use_container_width=True):
-            st.rerun()
-    
-    st.markdown("---")
-    
-    # Enhanced language switch
-    st.markdown(f"**{LANGUAGES[st.session_state.language]['language']}**")
-    
-    lang_col1, lang_col2 = st.columns(2)
-    with lang_col1:
-        if st.button("Русский 🇷🇺", use_container_width=True, type="primary" if st.session_state.language == "Русский" else "secondary"):
-            st.session_state.language = "Русский"
-            st.rerun()
-    
-    with lang_col2:
-        if st.button("Қазақша 🇰🇿", use_container_width=True, type="primary" if st.session_state.language == "Қазақша" else "secondary"):
-            st.session_state.language = "Қазақша"
-            st.rerun()
-    
-    st.markdown("---")
-    
-    # Enhanced quick stats
-    st.markdown(f"**{LANGUAGES[st.session_state.language]['stats']}**")
-    stats = stats_system.get_stats(st.session_state.language)
-    
-    st.metric(
-        LANGUAGES[st.session_state.language]["users_today"], 
-        f"{stats['users_today']}+",
-        delta="+12%"
-    )
-    st.metric(
-        LANGUAGES[st.session_state.language]["success_rate"], 
-        f"{stats['success_rate']}%",
-        delta="+2.1%"
-    )
-    st.metric(
-        "Completion Rate",
-        f"{stats['completion_rate']}%"
-    )
-
-# =============================
-# 🏠 ENHANCED MAIN PAGE
-# =============================
-if not st.session_state.test_started and not st.session_state.show_loading and not st.session_state.show_results and not st.session_state.show_stats:
-    st.markdown(f'<div class="main-header">{LANGUAGES[st.session_state.language]["title"]}</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="sub-header">{LANGUAGES[st.session_state.language]["subtitle"]}</div>', unsafe_allow_html=True)
-    
-    st.markdown("---")
-    
-    # Enhanced hero section
-    col1, col2 = st.columns([2, 1])
-    
-    with col1:
-        st.markdown(f"""
-        <div style='padding: 3rem; background: rgba(10, 10, 40, 0.8); border-radius: 30px; border: 2px solid #00ffff; box-shadow: 0 0 50px rgba(0, 255, 255, 0.4); margin-bottom: 2rem;'>
-            <h2 style='color: #00ffff; font-family: Orbitron, sans-serif; margin-bottom: 2rem; font-size: 2.5rem;'>🚀 Будущее начинается здесь</h2>
-            <p style='color: #b8b8ff; font-size: 1.4rem; line-height: 1.8; margin-bottom: 2.5rem;'>
-                Job.AI — это интеллектуальная система профориентации нового поколения, 
-                использующая передовые алгоритмы искусственного интеллекта для определения 
-                вашего идеального профессионального пути в Жамбылском политехническом колледже.
-            </p>
-            <div style='display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;'>
-                <div style='background: rgba(0, 255, 255, 0.15); padding: 1.5rem; border-radius: 15px; border: 1px solid #00ffff; text-align: center;'>
-                    <div style='color: #00ffff; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem;'>🎯 94.2%</div>
-                    <div style='color: #b8b8ff; font-size: 1rem;'>Точность рекомендаций</div>
-                </div>
-                <div style='background: rgba(108, 99, 255, 0.15); padding: 1.5rem; border-radius: 15px; border: 1px solid #6c63ff; text-align: center;'>
-                    <div style='color: #6c63ff; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem;'>📊 15+</div>
-                    <div style='color: #b8b8ff; font-size: 1rem;'>Профессий для выбора</div>
-                </div>
-                <div style='background: rgba(255, 0, 255, 0.15); padding: 1.5rem; border-radius: 15px; border: 1px solid #ff00ff; text-align: center;'>
-                    <div style='color: #ff00ff; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem;'>⚡ 12 мин</div>
-                    <div style='color: #b8b8ff; font-size: 1rem;'>Среднее время теста</div>
-                </div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Features grid
-        st.markdown("### 🎯 Почему выбирают Job.AI?")
-        features_col1, features_col2 = st.columns(2)
-        
-        with features_col1:
-            st.markdown("""
-            <div style='background: rgba(20, 20, 60, 0.6); padding: 1.5rem; border-radius: 15px; margin: 1rem 0; border-left: 4px solid #00ffff;'>
-                <h4 style='color: #00ffff; margin-bottom: 0.5rem;'>🤖 AI Анализ</h4>
-                <p style='color: #b8b8ff; margin: 0;'>Передовые алгоритмы искусственного интеллекта</p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            st.markdown("""
-            <div style='background: rgba(20, 20, 60, 0.6); padding: 1.5rem; border-radius: 15px; margin: 1rem 0; border-left: 4px solid #ff00ff;'>
-                <h4 style='color: #ff00ff; margin-bottom: 0.5rem;'>📈 Карьерный план</h4>
-                <p style='color: #b8b8ff; margin: 0;'>Пошаговое руководство по развитию</p>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        with features_col2:
-            st.markdown("""
-            <div style='background: rgba(20, 20, 60, 0.6); padding: 1.5rem; border-radius: 15px; margin: 1rem 0; border-left: 4px solid #6c63ff;'>
-                <h4 style='color: #6c63ff; margin-bottom: 0.5rem;'>💼 Рынок труда</h4>
-                <p style='color: #b8b8ff; margin: 0;'>Актуальные данные о востребованности</p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            st.markdown("""
-            <div style='background: rgba(20, 20, 60, 0.6); padding: 1.5rem; border-radius: 15px; margin: 1rem 0; border-left: 4px solid #00ff00;'>
-                <h4 style='color: #00ff00; margin-bottom: 0.5rem;'>🎓 Экспертиза</h4>
-                <p style='color: #b8b8ff; margin: 0;'>Разработано с участием HR-специалистов</p>
-            </div>
-            """, unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown(f"""
-        <div style='text-align: center; padding: 2.5rem; background: rgba(20, 20, 50, 0.8); border-radius: 25px; border: 2px solid #ff00ff; margin-bottom: 2rem;'>
-            <div style='font-size: 5rem; margin-bottom: 1.5rem; animation: float 3s ease-in-out infinite;'>🤖</div>
-            <h3 style='color: #ff00ff; margin-bottom: 1rem; font-family: Orbitron, sans-serif;'>AI-Powered</h3>
-            <p style='color: #b8b8ff; margin-bottom: 2rem; font-size: 1.1rem;'>Технологии будущего уже здесь</p>
-            <div style='color: #00ffff; font-size: 1rem; line-height: 1.8;'>
-                <div>🎓 {stats['users_today']}+ сегодня</div>
-                <div>⚡ {stats['success_rate']}% успеха</div>
-                <div>🕒 {stats['avg_time']} среднее время</div>
-                <div>📈 {stats['completion_rate']}% завершают</div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Test info card
-        st.markdown(f"""
-        <div style='background: rgba(10, 10, 40, 0.9); padding: 2rem; border-radius: 20px; border: 1px solid #6c63ff;'>
-            <h4 style='color: #6c63ff; text-align: center; margin-bottom: 1.5rem;'>📋 О тесте</h4>
-            <div style='color: #b8b8ff; line-height: 1.8;'>
-                <div>• {LANGUAGES[st.session_state.language]['test_duration']}</div>
-                <div>• {LANGUAGES[st.session_state.language]['accuracy']}</div>
-                <div>• {LANGUAGES[st.session_state.language]['professions']}</div>
-                <div>• Анализ личности и навыков</div>
-                <div>• Персональные рекомендации</div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    st.markdown("---")
-    
-    # Enhanced start button
-    if st.button(LANGUAGES[st.session_state.language]["start_test"], use_container_width=True, type="primary"):
-        st.session_state.test_started = True
-        st.session_state.current_question = 0
-        st.session_state.answers = [None] * 40
-        st.rerun()
-
-# =============================
-# 📊 ENHANCED STATISTICS PAGE
-# =============================
-elif st.session_state.show_stats:
-    st.markdown(f'<div class="main-header">{LANGUAGES[st.session_state.language]["title"]}</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="section-header">{LANGUAGES[st.session_state.language]["stats"]}</div>', unsafe_allow_html=True)
-    
-    stats = stats_system.get_stats(st.session_state.language)
-    
-    st.markdown("""
-    <div style="background: rgba(10, 10, 40, 0.9); border-radius: 25px; padding: 2.5rem; margin: 2rem 0; border: 2px solid #6c63ff; box-shadow: 0 0 40px rgba(108, 99, 255, 0.4);">
-        <div style="text-align: center; margin-bottom: 2rem;">
-            <h3 style="color: #00ffff; font-family: Orbitron, sans-serif; font-size: 2rem;">📈 Реальная статистика платформы</h3>
-            <p style="color: #b8b8ff; font-size: 1.2rem;">Данные обновляются в реальном времени</p>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Enhanced stats grid
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        st.metric(
-            LANGUAGES[st.session_state.language]["users_today"], 
-            f"{stats['users_today']}+",
-            delta="+12% за сегодня",
-            delta_color="normal"
-        )
-    
-    with col2:
-        st.metric(
-            LANGUAGES[st.session_state.language]["total_tests"], 
-            f"{stats['total_tests']:,}",
-            delta="+1,234 за неделю"
-        )
-    
-    with col3:
-        st.metric(
-            LANGUAGES[st.session_state.language]["success_rate"], 
-            f"{stats['success_rate']}%",
-            delta="+2.1%"
-        )
-    
-    with col4:
-        st.metric(
-            LANGUAGES[st.session_state.language]["avg_time"], 
-            stats['avg_time'],
-            delta="-1:23 мин"
-        )
-    
-    # Analytics charts
-    st.markdown("---")
-    st.markdown("### 📊 Аналитика платформы")
-    
-    chart_data = stats_system.generate_analytics_chart()
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.markdown("##### 📈 Рост пользователей")
-        st.line_chart(chart_data.set_index('Месяц')['Пользователи'])
-    
-    with col2:
-        st.markdown("##### 🎯 Распределение по профессиям")
-        profession_data = pd.DataFrame({
-            'Профессия': ['IT', 'Юриспруденция', 'Искусство', 'Бухгалтерия', 'Нефтегаз'],
-            'Процент': [35, 25, 15, 15, 10]
-        })
-        st.bar_chart(profession_data.set_index('Профессия'))
-
-# =============================
-# ❓ ENHANCED TEST QUESTIONS
-# =============================
-elif st.session_state.test_started and not st.session_state.show_loading and not st.session_state.show_results:
-    current_lang = st.session_state.language
-    
-    # Progress bar
-    progress = st.session_state.current_question / len(QUESTIONS[current_lang])
-    st.progress(progress)
-    
-    st.markdown(f"""
-    <div style='text-align: center; margin-bottom: 2rem;'>
-        <div style='color: #00ffff; font-size: 1.2rem; font-weight: 600;'>
-            {LANGUAGES[current_lang]['progress_text'].format(current=st.session_state.current_question + 1, total=len(QUESTIONS[current_lang]))}
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Current question
-    question_text = QUESTIONS[current_lang][st.session_state.current_question]
-    
-    st.markdown(f"""
-    <div style='background: rgba(20, 20, 60, 0.8); padding: 2.5rem; border-radius: 20px; border: 2px solid #6c63ff; margin: 2rem 0;'>
-        <h2 style='color: #00ffff; text-align: center; font-family: Exo 2, sans-serif; font-size: 1.8rem;'>
-            {question_text}
-        </h2>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Answer options with enhanced styling
-    answer = st.radio(
-        "Выберите вариант ответа:",
-        ["Совершенно не согласен", "Не согласен", "Нейтрален", "Согласен", "Полностью согласен"],
-        key=f"question_{st.session_state.current_question}",
-        index=st.session_state.answers[st.session_state.current_question] - 1 if st.session_state.answers[st.session_state.current_question] else None
-    )
-    
-    # Map answer to number
-    answer_map = {
-        "Совершенно не согласен": 1,
-        "Не согласен": 2,
-        "Нейтрален": 3,
-        "Согласен": 4,
-        "Полностью согласен": 5
-    }
-    
-    st.session_state.answers[st.session_state.current_question] = answer_map[answer]
-    
-    # Navigation buttons
+if not st.session_state.test_started:
     col1, col2, col3 = st.columns([1, 2, 1])
-    
-    with col1:
-        if st.session_state.current_question > 0:
-            if st.button("⬅️ Назад", use_container_width=True):
-                st.session_state.current_question -= 1
-                st.rerun()
-    
-    with col3:
-        if st.session_state.current_question < len(QUESTIONS[current_lang]) - 1:
-            if st.button("Далее ➡️", use_container_width=True, type="primary"):
-                st.session_state.current_question += 1
-                st.rerun()
-        else:
-            if st.button("🏁 Завершить тест", use_container_width=True, type="primary"):
-                st.session_state.show_loading = True
-                st.session_state.personality_traits = analytics.analyze_personality(st.session_state.answers)
-                st.rerun()
-
-# =============================
-# 🔄 ENHANCED LOADING ANIMATION
-# =============================
-elif st.session_state.show_loading:
-    st.markdown(f'<div class="main-header">{LANGUAGES[st.session_state.language]["title"]}</div>', unsafe_allow_html=True)
-    
-    st.markdown("""
-    <div class="loading-container">
-        <div class="neon-loader"></div>
-        <h2 style="color: #00ffff; font-family: Orbitron, sans-serif; margin-bottom: 1rem;">AI Анализирует ваши ответы</h2>
-        <p style="color: #b8b8ff; font-size: 1.2rem; margin-bottom: 2rem;">Job.AI обрабатывает ваши ответы и подбирает идеальные профессии...</p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Simulate AI processing
-    progress_bar = st.progress(0)
-    status_text = st.empty()
-    
-    for i in range(100):
-        progress_bar.progress(i + 1)
-        percent = i + 1
-        if percent < 30:
-            status_text.text(f"📊 Анализ личности... {percent}%")
-        elif percent < 60:
-            status_text.text(f"🎯 Сопоставление с профессиями... {percent}%")
-        elif percent < 90:
-            status_text.text(f"📈 Оценка потенциала... {percent}%")
-        else:
-            status_text.text(f"✨ Формирование результатов... {percent}%")
-        time.sleep(0.03)
-    
-    time.sleep(1)
-    st.session_state.show_loading = False
-    st.session_state.show_results = True
-    st.rerun()
-
-# =============================
-# 📊 ENHANCED RESULTS PAGE
-# =============================
-elif st.session_state.show_results:
-    # Calculate enhanced results
-    scores = analytics.calculate_scores(st.session_state.answers)
-    top_professions = analytics.get_top_professions(scores, top_n=3)
-    personality_traits = st.session_state.personality_traits
-    
-    st.markdown(f'<div class="main-header">{LANGUAGES[st.session_state.language]["title"]}</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="section-header">{LANGUAGES[st.session_state.language]["your_results"]}</div>', unsafe_allow_html=True)
-    
-    # Personality Analysis
-    st.markdown("### 🧠 Анализ вашей личности")
-    
-    trait_cols = st.columns(5)
-    trait_names = {
-        "analytical": "Аналитик",
-        "creative": "Творец", 
-        "practical": "Практик",
-        "social": "Коммуникатор",
-        "leadership": "Лидер"
-    }
-    
-    for idx, (trait, score) in enumerate(personality_traits.items()):
-        with trait_cols[idx]:
-            st.metric(trait_names[trait], f"{score:.0f}%")
-    
-    # Top professions
-    for rank, (profession_code, score) in enumerate(top_professions):
-        profession = PROFESSIONS[profession_code]
-        medals = ["🥇", "🥈", "🥉"]
+    with col2:
+        st.markdown("""
+        <div style='text-align: center; padding: 3rem; background: rgba(59, 130, 246, 0.1); border-radius: 20px; border: 2px solid #3b82f6;'>
+            <div style='font-size: 4rem; margin-bottom: 1rem;'>🎯</div>
+            <h3 style='color: #3b82f6; margin-bottom: 1rem;'>Готовы найти свою профессию?</h3>
+            <p style='color: #cbd5e1; line-height: 1.6;'>
+                Пройдите тестирование и получите персональные рекомендации 
+                по выбору карьерного пути
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
         
-        with st.container():
-            st.markdown(f'<div class="profession-card">', unsafe_allow_html=True)
-            
-            # Header
-            col1, col2 = st.columns([3, 1])
-            with col1:
-                st.markdown(f'<h2 style="color: #00ffff; font-family: Orbitron, sans-serif; margin-bottom: 0.5rem; font-size: 2.2rem;">{medals[rank]} {profession["name"][st.session_state.language]}</h2>', unsafe_allow_html=True)
-                st.markdown(f'<p style="color: #b8b8ff; font-size: 1.2rem; line-height: 1.5; margin-bottom: 1rem;">{profession["description"][st.session_state.language]}</p>', unsafe_allow_html=True)
-            
-            with col2:
-                st.markdown(f'<div style="color: #00ffff; font-size: 3.5rem; font-weight: 900; font-family: Orbitron, sans-serif; text-align: right;">{score:.1f}%</div>', unsafe_allow_html=True)
-                st.markdown(f'<div style="color: #b8b8ff; font-size: 1.1rem; text-align: right;">{LANGUAGES[st.session_state.language]["compatibility"]}</div>', unsafe_allow_html=True)
-            
-            # Enhanced metrics
-            col3, col4, col5, col6 = st.columns(4)
-            with col3:
-                st.markdown(f'''
-                <div class="metric-card">
-                    <div class="metric-value">{profession["salary"].split(" - ")[0]}</div>
-                    <div class="metric-label">{LANGUAGES[st.session_state.language]["salary"]}</div>
-                </div>
-                ''', unsafe_allow_html=True)
-            with col4:
-                st.markdown(f'''
-                <div class="metric-card">
-                    <div class="metric-value">{len(profession["career_plan"][st.session_state.language])}</div>
-                    <div class="metric-label">Этапы карьеры</div>
-                </div>
-                ''', unsafe_allow_html=True)
-            with col5:
-                st.markdown(f'''
-                <div class="metric-card">
-                    <div class="metric-value">{profession["demand"]}</div>
-                    <div class="metric-label">Востребованность</div>
-                </div>
-                ''', unsafe_allow_html=True)
-            with col6:
-                st.markdown(f'''
-                <div class="metric-card">
-                    <div class="metric-value">{profession["growth"]}</div>
-                    <div class="metric-label">Рост</div>
-                </div>
-                ''', unsafe_allow_html=True)
-            
-            # Work places
-            st.markdown("---")
-            col7, col8 = st.columns(2)
-            
-            with col7:
-                st.markdown(f'<h4 style="color: #ff00ff; margin-bottom: 1rem;">🏢 {LANGUAGES[st.session_state.language]["work_places"]}</h4>', unsafe_allow_html=True)
-                for place in profession["places"][st.session_state.language]:
-                    st.markdown(f'<div style="color: #b8b8ff; margin-bottom: 0.5rem; padding: 0.8rem; background: rgba(108, 99, 255, 0.1); border-radius: 10px; border-left: 4px solid #6c63ff;">• {place}</div>', unsafe_allow_html=True)
-            
-            with col8:
-                st.markdown(f'<h4 style="color: #00ffff; margin-bottom: 1rem;">💼 Альтернативные варианты</h4>', unsafe_allow_html=True)
-                for place in profession["alternative_places"][st.session_state.language]:
-                    st.markdown(f'<div style="color: #b8b8ff; margin-bottom: 0.5rem; padding: 0.8rem; background: rgba(0, 255, 255, 0.1); border-radius: 10px; border-left: 4px solid #00ffff;">• {place}</div>', unsafe_allow_html=True)
-            
-            # Career plan
-            st.markdown("---")
-            st.markdown(f'<h4 style="color: #ff00ff; margin-bottom: 1.5rem;">{LANGUAGES[st.session_state.language]["career_plan"]}</h4>', unsafe_allow_html=True)
-            
-            for i, step in enumerate(profession["career_plan"][st.session_state.language]):
-                st.markdown(f'''
-                <div style="background: rgba(20, 20, 50, 0.7); padding: 1.5rem; margin: 1rem 0; border-radius: 15px; border-left: 5px solid #ff00ff; transition: all 0.3s ease;">
-                    <div style="color: #ff00ff; font-weight: 700; margin-bottom: 0.5rem; font-size: 1.1rem;">Шаг {i+1}</div>
-                    <div style="color: #ffffff; font-size: 1.05rem;">{step}</div>
-                </div>
-                ''', unsafe_allow_html=True)
-            
-            # Advice
-            st.markdown("---")
-            st.markdown(f'''
-            <div style="margin-top: 2rem; padding: 2rem; background: rgba(0, 255, 255, 0.15); border-radius: 20px; border: 2px solid #00ffff; box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);">
-                <h4 style="color: #00ffff; margin-bottom: 1.5rem; font-family: Orbitron, sans-serif;">{LANGUAGES[st.session_state.language]["development"]}</h4>
-                <p style="color: #b8b8ff; line-height: 1.7; margin: 0; font-size: 1.1rem;">{profession["advice"][st.session_state.language]}</p>
-            </div>
-            ''', unsafe_allow_html=True)
-            
-            st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Action buttons
-    st.markdown("---")
-    col9, col10, col11 = st.columns([1, 2, 1])
-    with col10:
-        st.markdown('<div style="text-align: center;">', unsafe_allow_html=True)
-        
-        if st.button(LANGUAGES[st.session_state.language]["restart"], use_container_width=True, type="primary"):
-            st.session_state.test_started = False
-            st.session_state.show_loading = False
-            st.session_state.show_results = False
+        if st.button(LANGUAGES[selected_language]["start_test"], use_container_width=True):
+            st.session_state.test_started = True
             st.session_state.current_question = 0
-            st.session_state.answers = [None] * 40
+            st.session_state.answers = {}
+            st.session_state.assessment_complete = False
             st.rerun()
+
+if st.session_state.test_started and not st.session_state.assessment_complete:
+    questions = questions_data[selected_language]
+    
+    if st.session_state.current_question < len(questions):
+        # Progress
+        progress_value = (st.session_state.current_question + 1) / len(questions)
+        st.progress(progress_value)
         
-        if st.button(LANGUAGES[st.session_state.language]["download"], use_container_width=True):
-            st.success("📄 Функция экспорта в PDF будет доступна в следующем обновлении системы!")
+        progress_text = LANGUAGES[selected_language]["progress_text"].format(
+            current=st.session_state.current_question + 1, 
+            total=len(questions),
+            percentage=int((st.session_state.current_question + 1)/len(questions)*100)
+        )
+        st.markdown(f"**{progress_text}**")
+        
+        # Current question
+        current_q = questions[st.session_state.current_question]
+        st.markdown(f'<div class="question-container">{st.session_state.current_question + 1}. {current_q}</div>', unsafe_allow_html=True)
+        
+        # Rating options
+        rating_labels = {
+            "Русский": ["Совсем нет", "Скорее нет", "Нейтрально", "Скорее да", "Определенно да"],
+            "Қазақша": ["Мүлдем жоқ", "Бәлкім жоқ", "Бейтарап", "Бәлкім иә", "Мүлдем иә"]
+        }
+        
+        st.markdown('<div class="rating-container">', unsafe_allow_html=True)
+        
+        cols = st.columns(5)
+        selected_answer = None
+        
+        for i, col in enumerate(cols):
+            with col:
+                value = i + 1
+                is_selected = st.session_state.answers.get(st.session_state.current_question) == value
+                
+                st.markdown(f"""
+                <div class="rating-option {'selected' if is_selected else ''}">
+                    <span class="rating-number">{value}</span>
+                    <span class="rating-label">{rating_labels[selected_language][i]}</span>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                if st.button(f"Выбрать {value}", key=f"btn_{i}", use_container_width=True):
+                    selected_answer = value
         
         st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Handle answer selection
+        if selected_answer:
+            st.session_state.answers[st.session_state.current_question] = selected_answer
+            st.session_state.current_question += 1
+            
+            if st.session_state.current_question >= len(questions):
+                st.session_state.assessment_complete = True
+            
+            st.rerun()
+            
+    else:
+        st.session_state.assessment_complete = True
 
 # =============================
-# 👣 ENHANCED FOOTER
+# 📊 RESULTS ANALYSIS
 # =============================
-st.markdown("---")
-
-footer_col1, footer_col2, footer_col3 = st.columns([1, 2, 1])
-
-with footer_col2:
-    st.markdown(f"""
-    <div style='text-align: center; color: #b8b8ff; font-size: 1rem; line-height: 1.7; padding: 3rem 1rem;'>
-        <strong style='color: #00ffff; font-size: 1.3rem; font-family: Orbitron, sans-serif;'>{LANGUAGES[st.session_state.language]["footer"]}</strong><br><br>
-        
-        <div style="margin: 1.5rem 0; padding: 1.5rem; background: rgba(20, 20, 60, 0.5); border-radius: 15px;">
-            <strong style="color: #ff00ff; font-size: 1.1rem;">{LANGUAGES[st.session_state.language]["contact"]}</strong><br>
-            <div style="margin-top: 1rem;">
-                📱 <strong>{LANGUAGES[st.session_state.language]["phone"]}</strong><br>
-                📧 <strong>{LANGUAGES[st.session_state.language]["email"]}</strong><br>
-                🌐 <strong>{LANGUAGES[st.session_state.language]["website"]}</strong>
-            </div>
-        </div>
-        
-        <div style="margin-top: 2rem; font-size: 0.9rem; color: #8888ff;">
-            🤖 Интеллектуальная система профориентации | AI Assistant © 2025<br>
-            🎯 Жамбылский политехнический высший колледж | Все права защищены
-        </div>
-        
-        <div style="margin-top: 1.5rem; font-size: 0.8rem; color: #6666ff; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
-            <div>🎯 Точность: 94.2%</div>
-            <div>⚡ Скорость: 12-15 мин</div>
-            <div>🎓 Профессий: 15+</div>
-        </div>
+if st.session_state.assessment_complete:
+    # Calculate results
+    questions = questions_data[selected_language]
+    
+    # Simple scoring based on answer patterns
+    tech_score = sum([st.session_state.answers.get(i, 3) for i in [0, 7, 13, 24, 34, 44]]) / 6 * 20
+    creative_score = sum([st.session_state.answers.get(i, 3) for i in [4, 13, 18, 27, 37, 47]]) / 6 * 20
+    social_score = sum([st.session_state.answers.get(i, 3) for i in [1, 5, 10, 21, 32, 38]]) / 6 * 20
+    physical_score = sum([st.session_state.answers.get(i, 3) for i in [3, 19, 29, 39, 44, 48]]) / 6 * 20
+    
+    scores = {
+        "it_tech": tech_score,
+        "healthcare": social_score,
+        "engineering": (tech_score + physical_score) / 2,
+        "creative": creative_score
+    }
+    
+    dominant_category = max(scores, key=scores.get)
+    profession_info = professions_data[dominant_category]
+    
+    # Display results
+    st.markdown("---")
+    
+    # SUCCESS HEADER
+    st.markdown("""
+    <div style="text-align: center; padding: 3rem 1rem; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.1) 100%); border-radius: 20px; margin: 2rem 0; border: 2px solid #3b82f6;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+        <h1 style="color: #3b82f6; margin-bottom: 1rem; font-size: 2.5rem; font-weight: 700;">
+            ТЕСТИРОВАНИЕ ЗАВЕРШЕНО!
+        </h1>
+        <p style="color: #cbd5e1; font-size: 1.2rem; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+            Ваш профессиональный профиль успешно проанализирован
+        </p>
     </div>
     """, unsafe_allow_html=True)
+    
+    # COMPETENCY PROFILE
+    st.markdown('<div class="section-header">📊 Профиль компетенций</div>', unsafe_allow_html=True)
+    
+    col1, col2 = st.columns([1, 2])
+    
+    with col1:
+        # Overall score
+        overall_score = sum(scores.values()) / len(scores)
+        
+        st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-value">{overall_score:.1f}%</div>
+            <div class="metric-label">Общий балл</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Category scores
+        st.markdown("### 📈 Оценка по категориям")
+        category_names = {
+            "it_tech": "IT и технологии",
+            "healthcare": "Медицина", 
+            "engineering": "Инженерия",
+            "creative": "Творчество"
+        }
+        
+        for category, score in scores.items():
+            st.markdown(f"**{category_names[category]}**")
+            st.progress(score / 100)
+            st.markdown(f"<div style='text-align: right; color: #cbd5e1; font-size: 0.9rem;'>{score:.1f}%</div>", unsafe_allow_html=True)
+    
+    with col2:
+        # Dominant category
+        st.markdown(f"### 🏆 Основная сфера: {profession_info['name'][selected_language]}")
+        st.markdown(f"*{profession_info['description'][selected_language]}*")
+        
+        # Insights
+        st.markdown("#### 💡 Ключевые выводы")
+        
+        insights = [
+            f"**Совместимость:** {scores[dominant_category]:.1f}%",
+            f"**Сильные стороны:** {', '.join(list(profession_info['skills'].keys())[:2])}",
+            f"**Потенциал роста:** {profession_info['market_metrics']['growth_potential']}/5.0",
+            f"**Востребованность:** {profession_info['market_metrics']['market_demand']}/5.0"
+        ]
+        
+        for insight in insights:
+            st.markdown(f"- {insight}")
+        
+        # Skills
+        st.markdown("#### 🔧 Навыки")
+        for skill, value in profession_info["skills"].items():
+            st.markdown(f"**{skill}**")
+            st.markdown(f'<div class="skill-bar-container"><div class="skill-bar-fill" style="width: {value}%;"></div></div>', unsafe_allow_html=True)
+    
+    # MARKET ANALYSIS
+    st.markdown("---")
+    st.markdown('<div class="section-header">📊 Анализ рынка</div>', unsafe_allow_html=True)
+    
+    # Salary info
+    st.markdown("### 💰 Уровень зарплат")
+    salary_cols = st.columns(3)
+    
+    salary_data = profession_info['salary_ranges']
+    salary_labels = ["Начальный уровень", "Опытный", "Эксперт"]
+    
+    for i, (col, (level, salary)) in enumerate(zip(salary_cols, list(salary_data.items())[:3])):
+        with col:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-value">{salary[selected_language]}</div>
+                <div class="metric-label">{salary_labels[i]}</div>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # Market metrics
+    st.markdown("### 📈 Рыночные показатели")
+    metric_cols = st.columns(4)
+    
+    metrics = profession_info['market_metrics']
+    metric_labels = ["Рост", "Спрос", "Перспективы", "Зарплата"]
+    
+    for i, (col, (metric, value)) in enumerate(zip(metric_cols, metrics.items())):
+        with col:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-value">{value}/5.0</div>
+                <div class="metric-label">{metric_labels[i]}</div>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # Market analysis
+    st.markdown("#### 📊 Обзор рынка")
+    st.markdown(f"{profession_info['market_analysis'][selected_language]}")
+    
+    # RECOMMENDED PROFESSIONS
+    st.markdown("---")
+    st.markdown('<div class="section-header">💼 Рекомендуемые профессии</div>', unsafe_allow_html=True)
+    
+    st.markdown('<div class="profession-grid">', unsafe_allow_html=True)
+    
+    for profession in profession_info["professions"]:
+        st.markdown(f"""
+        <div class="grid-item">
+            <h4 style="color: #60a5fa; margin-bottom: 0.5rem; font-family: 'Plus Jakarta Sans', sans-serif;">{profession['title'][selected_language]}</h4>
+            <div style="color: #3b82f6; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">{profession['compatibility']*100:.0f}%</div>
+            <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.4; margin-bottom: 1rem;">{profession['description'][selected_language]}</p>
+            <div style="color: #94a3b8; font-size: 0.8rem;">
+                <strong>Образование:</strong> {profession['education'][selected_language]}<br>
+                <strong>Рост:</strong> {profession['growth'][selected_language]}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # DEVELOPMENT PLAN
+    st.markdown("---")
+    st.markdown('<div class="section-header">🎯 План развития</div>', unsafe_allow_html=True)
+    
+    # Learning path
+    st.markdown("### 📚 Этапы обучения")
+    for i, step in enumerate(profession_info['learning_path'][selected_language]):
+        st.markdown(f"{i+1}. **{step}**")
+    
+    # Development timeline
+    st.markdown("### 🗓️ План на 12 месяцев")
+    
+    development_phases = {
+        "1-3 месяца": [
+            "Изучение основ профессии",
+            "Прохождение онлайн-курсов",
+            "Создание первого проекта"
+        ],
+        "4-6 месяцев": [
+            "Углубленное изучение",
+            "Практика на реальных задачах",
+            "Создание портфолио"
+        ],
+        "7-12 месяцев": [
+            "Сертификация",
+            "Поиск стажировки/работы",
+            "Профессиональное развитие"
+        ]
+    }
+    
+    for phase, tasks in development_phases.items():
+        with st.expander(f"📅 {phase}"):
+            for task in tasks:
+                st.markdown(f"- {task}")
+    
+    # RESTART BUTTON
+    st.markdown("---")
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        if st.button("🔄 Пройти тест заново", use_container_width=True):
+            st.session_state.test_started = False
+            st.session_state.current_question = 0
+            st.session_state.answers = {}
+            st.session_state.assessment_complete = False
+            st.rerun()
+
+# =============================
+# 📞 CONTACT INFORMATION
+# =============================
+st.markdown("---")
+st.markdown('<div class="section-header">📞 Контактная информация</div>', unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.markdown(f"""
+    **{LANGUAGES[selected_language]['career_consultants']}**
+    
+    📞 **87766680880**
+    ✉️ askhatseitkhan@gmail.com
+    🕒 9:00-18:00 Пн-Пт
+    🕒 10:00-16:00 Сб
+    """)
+
+with col2:
+    st.markdown(f"""
+    **{LANGUAGES[selected_language]['career_development_center']}**
+    
+    🏢 **Тараз, Толе Би 66**
+    🌐 job-ai.kz
+    📱 Мобильное приложение
+    """)
+
+with col3:
+    st.markdown(f"""
+    **{LANGUAGES[selected_language]['online_booking']}**
+    
+    💻 job-ai.kz/booking
+    📧 WhatsApp консультации
+    🎯 Бесплатные услуги
+    """)
+
+# =============================
+# 👣 FOOTER
+# =============================
+st.markdown("---")
+st.markdown(f"""
+<div style='text-align: center; color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; padding: 2rem 1rem;'>
+    <strong style='color: #3b82f6; font-size: 1.1rem;'>{LANGUAGES[selected_language]['footer']}</strong><br><br>
+    
+    📞 87766680880 | 🏢 Тараз, Толе Би 66 | 🌐 job-ai.kz<br>
+    💼 Профессиональное тестирование | 🎯 Карьерное консультирование
+</div>
+""", unsafe_allow_html=True)
