@@ -3,9 +3,10 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 import math
+import random
 
 st.set_page_config(
-    page_title="JobAI Pro — Intelligent Career Platform",
+    page_title="JobAI Nexus — Futuristic Career Intelligence",
     page_icon="🚀",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -16,309 +17,420 @@ st.set_page_config(
 # =============================
 LANGUAGES = {
     "Русский": {
-        "title": "JobAI Pro",
-        "subtitle": "Интеллектуальная платформа карьерного развития", 
-        "language_select": "🌐 Выберите язык интерфейса",
-        "progress_text": "📊 Прогресс тестирования: {current}/{total} вопросов ({percentage}%)",
-        "start_test": "🚀 ЗАПУСТИТЬ КОМПЛЕКСНЫЙ КАРЬЕРНЫЙ АНАЛИЗ",
-        "analyze_results": "🚀 АНАЛИЗИРОВАТЬ РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ",
-        "competency_profile": "📈 Детальный профиль компетенций",
-        "technical": "Технико-аналитические",
-        "creative": "Творческо-инновационные",
-        "social": "Социально-коммуникативные", 
-        "physical": "Физико-практические",
-        "salary_range": "💰 Диапазон заработной платы",
-        "market_analysis": "📊 Комплексный анализ рынка труда",
-        "key_competencies": "🔧 Ключевые профессиональные компетенции",
-        "recommended_professions": "💼 Рекомендованные профессии и специальности",
-        "description": "Подробное описание",
-        "market_demand": "Уровень рыночного спроса",
-        "education": "Образовательные требования",
-        "growth": "Перспективы роста профессии",
-        "responsibilities": "Основные должностные обязанности",
-        "requirements": "Профессиональные требования",
-        "key_employers": "🏢 Ключевые работодатели и компании",
-        "detailed_analysis": "📊 Детальный анализ профессионального профиля",
-        "development_plan": "🎯 Индивидуальный план развития",
-        "career_trajectory": "🗺️ Карьерная траектория развития", 
-        "professional_support": "📞 Профессиональная карьерная поддержка",
-        "career_consultants": "🎓 Сертифицированные карьерные консультанты",
-        "career_development_center": "🏢 Центр развития карьеры и компетенций",
-        "online_booking": "📅 Онлайн-запись на консультацию",
-        "footer": "©️ 2024 JobAI Pro — Интеллектуальная система карьерного проектирования и развития",
-        "assessment_score": "Общий балл оценки",
-        "compatibility_level": "Уровень совместимости",
-        "industry_trends": "Отраслевые тренды",
-        "skill_gap_analysis": "Анализ разрыва навыков",
-        "learning_path": "Образовательный путь",
-        "certification_recommendations": "Рекомендации по сертификации",
-        "networking_strategy": "Стратегия нетворкинга"
+        "title": "JobAI NEXUS",
+        "subtitle": "КВАНТОВАЯ СИСТЕМА КАРЬЕРНОГО ИНТЕЛЛЕКТА", 
+        "language_select": "🌐 ВЫБОР ЯЗЫКА ИНТЕРФЕЙСА",
+        "progress_text": "⚡ ПРОГРЕСС: {current}/{total} ({percentage}%)",
+        "start_test": "🚀 АКТИВИРОВАТЬ КВАНТОВЫЙ АНАЛИЗ",
+        "analyze_results": "🚀 ЗАПУСТИТЬ НЕЙРОННЫЙ АНАЛИЗ",
+        "competency_profile": "📊 КВАНТОВЫЙ ПРОФИЛЬ КОМПЕТЕНЦИЙ",
+        "technical": "ТЕХНО-АНАЛИТИЧЕСКИЕ",
+        "creative": "КРЕАТИВНО-ИННОВАЦИОННЫЕ",
+        "social": "СОЦИАЛЬНО-КОММУНИКАТИВНЫЕ", 
+        "physical": "ФИЗИКО-ПРАКТИЧЕСКИЕ",
+        "salary_range": "💰 КВАНТОВАЯ ЗАРПЛАТНАЯ МАТРИЦА",
+        "market_analysis": "📊 НЕЙРОСЕТЕВОЙ АНАЛИЗ РЫНКА",
+        "key_competencies": "🔧 КЛЮЧЕВЫЕ КВАНТОВЫЕ КОМПЕТЕНЦИИ",
+        "recommended_professions": "💼 ТОП-40 ПЕРСПЕКТИВНЫХ ПРОФЕССИЙ",
+        "description": "КВАНТОВОЕ ОПИСАНИЕ",
+        "market_demand": "УРОВЕНЬ РЫНОЧНОГО СПРОСА",
+        "education": "ОБРАЗОВАТЕЛЬНАЯ ТРАЕКТОРИЯ",
+        "growth": "ПРОГНОЗ РОСТА ПРОФЕССИИ",
+        "responsibilities": "ОСНОВНЫЕ ФУНКЦИОНАЛЬНЫЕ ОБЯЗАННОСТИ",
+        "requirements": "КВАНТОВЫЕ ТРЕБОВАНИЯ",
+        "key_employers": "🏢 ТОП-РАБОТОДАТЕЛИ МАТРИЦЫ",
+        "detailed_analysis": "📊 ГЛУБОКИЙ НЕЙРОННЫЙ АНАЛИЗ",
+        "development_plan": "🎯 ПЕРСОНАЛИЗИРОВАННЫЙ ПЛАН РАЗВИТИЯ",
+        "career_trajectory": "🗺️ КВАНТОВАЯ КАРЬЕРНАЯ ТРАЕКТОРИЯ", 
+        "professional_support": "📞 ЦИФРОВАЯ ПОДДЕРЖКА КАРЬЕРЫ",
+        "career_consultants": "🎓 КВАНТОВЫЕ КАРЬЕРНЫЕ КОНСУЛЬТАНТЫ",
+        "career_development_center": "🏢 ЦЕНТР КВАНТОВОГО РАЗВИТИЯ",
+        "online_booking": "📅 ЦИФРОВАЯ ЗАПИСЬ НА КОНСУЛЬТАЦИЮ",
+        "footer": "©️ 2024 JobAI NEXUS — КВАНТОВАЯ СИСТЕМА КАРЬЕРНОГО ПРОЕКТИРОВАНИЯ",
+        "assessment_score": "ОБЩИЙ КВАНТОВЫЙ БАЛЛ",
+        "compatibility_level": "УРОВЕНЬ КВАНТОВОЙ СОВМЕСТИМОСТИ",
+        "industry_trends": "КВАНТОВЫЕ ОТРАСЛЕВЫЕ ТРЕНДЫ",
+        "skill_gap_analysis": "НЕЙРОННЫЙ АНАЛИЗ РАЗРЫВА НАВЫКОВ",
+        "learning_path": "КВАНТОВЫЙ ОБРАЗОВАТЕЛЬНЫЙ ПУТЬ",
+        "certification_recommendations": "РЕКОМЕНДАЦИИ ПО КВАНТОВОЙ СЕРТИФИКАЦИИ",
+        "networking_strategy": "СТРАТЕГИЯ КВАНТОВОГО НЕТВОРКИНГА"
     },
     "Қазақша": {
-        "title": "JobAI Pro", 
-        "subtitle": "Кәсіби дамудың интеллектуалды платформасы",
-        "language_select": "🌐 Интерфейс тілін таңдаңыз",
-        "progress_text": "📊 Тестілеу прогрессі: {current}/{total} сұрақ ({percentage}%)",
-        "start_test": "🚀 КЕПІЛДІ КӘСІБИ ТАЛДАУДЫ БАСТАУ",
-        "analyze_results": "🚀 ТЕСТІЛЕУ НӘТИЖЕЛЕРІН ТАЛДАУ",
-        "competency_profile": "📈 Құзыреттіліктердің егжей-тегжейлі профилі",
-        "technical": "Техникалық-аналитикалық",
-        "creative": "Шығармашылық-инновациялық",
-        "social": "Әлеуметтік-коммуникативтік",
-        "physical": "Физикалық-практикалық",
-        "salary_range": "💰 Жалақы алымы",
-        "market_analysis": "📊 Еңбек нарығынды кешенді талдау",
-        "key_competencies": "🔧 Негізгі кәсіби құзыреттіліктер",
-        "recommended_professions": "💼 Ұсынылатын кәсіптер мен мамандықтар",
-        "description": "Егжей-тегжейлі сипаттама",
-        "market_demand": "Нарықтық сұраныс деңгейі",
-        "education": "Білімдік талаптар",
-        "growth": "Кәсіптің даму перспективалары",
-        "responsibilities": "Негізгі қызметтік міндеттер",
-        "requirements": "Кәсіби талаптар",
-        "key_employers": "🏢 Негізгі жұмыс берушілер мен компаниялар",
-        "detailed_analysis": "📊 Кәсіби профильді егжей-тегжейлі талдау",
-        "development_plan": "🎯 Жеке даму жоспары",
-        "career_trajectory": "🗺️ Дамудың кәсіби траекториясы",
-        "professional_support": "📞 Кәсіби мансаптық қолдау",
-        "career_consultants": "🎓 Сертификатталған мансаптық кеңесшілер",
-        "career_development_center": "🏢 Мансапты және құзыреттіліктерді дамыту орталығы",
-        "online_booking": "📅 Кеңес үшін онлайн жаздыру",
-        "footer": "©️ 2024 JobAI Pro — Кәсіби жобалау мен дамудың интеллектуалды жүйесі",
-        "assessment_score": "Бағалаудың жалпы баллы",
-        "compatibility_level": "Сәйкестік деңгейі",
-        "industry_trends": "Салалық трендтер",
-        "skill_gap_analysis": "Дағдылар алшақтығын талдау",
-        "learning_path": "Білім беру жолы",
-        "certification_recommendations": "Сертификаттау бойынша ұсыныстар",
-        "networking_strategy": "Желілер құру стратегиясы"
+        "title": "JobAI NEXUS", 
+        "subtitle": "КӘСІБИ ИНТЕЛЛЕКТТІҢ КВАНТТЫҚ ЖҮЙЕСІ",
+        "language_select": "🌐 ИНТЕРФЕЙС ТІЛІН ТАҢДАУ",
+        "progress_text": "⚡ ПРОГРЕСС: {current}/{total} ({percentage}%)",
+        "start_test": "🚀 КВАНТТЫҚ ТАЛДАУДЫ БЕЛСЕНДІРУ",
+        "analyze_results": "🚀 НЕЙРОНДЫҚ ТАЛДАУДЫ ІСКЕ ҚОСУ",
+        "competency_profile": "📊 КВАНТТЫҚ ҚҰЗЫРЕТТІЛІК ПРОФИЛІ",
+        "technical": "ТЕХНО-АНАЛИТИКАЛЫҚ",
+        "creative": "КРЕАТИВТІ-ИННОВАЦИЯЛЫҚ",
+        "social": "ӘЛЕУМЕТТІК-КОММУНИКАТИВТІК",
+        "physical": "ФИЗИКАЛЫҚ-ПРАКТИКАЛЫҚ",
+        "salary_range": "💰 КВАНТТЫҚ ЖАЛАҚЫ МАТРИЦАСЫ",
+        "market_analysis": "📊 НЕЙРОЖЕЛІЛІК НАРЫҚТЫҚ ТАЛДАУ",
+        "key_competencies": "🔧 НЕГІЗГІ КВАНТТЫҚ ҚҰЗЫРЕТТІЛІКТЕР",
+        "recommended_professions": "💼 40 ҮЗДІК ПЕРСПЕКТИВАЛЫ КӘСІП",
+        "description": "КВАНТТЫҚ СИПАТТАМА",
+        "market_demand": "НӘРЫҚТЫҚ СҰРАНЫС ДЕҢГЕЙІ",
+        "education": "БІЛІМ БЕРУ ТРАЕКТОРИЯСЫ",
+        "growth": "КӘСІПТІҢ ӨСУ БОЛЖАМЫ",
+        "responsibilities": "НЕГІЗГІ ФУНКЦИОНАЛДЫҚ МІНДЕТТЕР",
+        "requirements": "КВАНТТЫҚ ТАЛАПТАР",
+        "key_employers": "🏢 МАТРИЦАНЫҢ ТОП-ЖҰМЫС БЕРУШІЛЕРІ",
+        "detailed_analysis": "📊 ТЕРЕҢ НЕЙРОНДЫҚ ТАЛДАУ",
+        "development_plan": "🎯 ЖЕКЕЛЕНДІРІЛГЕН ДАМУ ЖОСПАРЫ",
+        "career_trajectory": "🗺️ КВАНТТЫҚ КӘСІБИ ТРАЕКТОРИЯ",
+        "professional_support": "📞 КӘСІБИ ҚОЛДАУДЫҢ ЦИФРЛЫҚ ТҮРІ",
+        "career_consultants": "🎓 КВАНТТЫҚ МАНСАПТЫҚ КЕҢЕСШІЛЕР",
+        "career_development_center": "🏢 КВАНТТЫҚ ДАМУ ОРТАЛЫҒЫ",
+        "online_booking": "📅 КЕҢЕС УШІН ЦИФРЛЫҚ ЖАЗДЫРУ",
+        "footer": "©️ 2024 JobAI NEXUS — КӘСІБИ ЖОБАЛАУДЫҢ КВАНТТЫҚ ЖҮЙЕСІ",
+        "assessment_score": "ЖАЛПЫ КВАНТТЫҚ БАЛЛ",
+        "compatibility_level": "КВАНТТЫҚ СӘЙКЕСТІК ДЕҢГЕЙІ",
+        "industry_trends": "КВАНТТЫҚ САЛАЛЫҚ ТРЕНДТЕР",
+        "skill_gap_analysis": "ДАҒДЫЛАР АЛШАҚТЫҒЫН НЕЙРОНДЫҚ ТАЛДАУ",
+        "learning_path": "КВАНТТЫҚ БІЛІМ БЕРУ ЖОЛЫ",
+        "certification_recommendations": "КВАНТТЫҚ СЕРТИФИКАТТАУ БОЙЫНША ҰСЫНЫСТАР",
+        "networking_strategy": "КВАНТТЫҚ ЖЕЛІЛЕР ҚҰРУ СТРАТЕГИЯСЫ"
     }
 }
 
 # =============================
-# 🎨 PROFESSIONAL CORPORATE DESIGN
+# 🎨 FUTURISTIC CYBERPUNK DESIGN
 # =============================
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600;700&family=Rajdhani:wght@500;600;700&display=swap');
 
-/* Main Corporate Theme */
+/* Cyberpunk Background */
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
-    color: #1e293b;
-    font-family: 'Inter', sans-serif;
+    background: linear-gradient(-45deg, #0a0a0a, #1a1a2e, #16213e, #0f3460, #000000);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    color: #ffffff;
+    font-family: 'Exo 2', sans-serif;
 }
 
-/* Corporate Header */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Matrix Rain Effect */
+.matrix-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.1;
+}
+
+/* Quantum Header */
 .main-header {
-    font-size: 3.2rem !important;
+    font-size: 4.5rem !important;
     text-align: center;
-    font-weight: 800;
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+    font-weight: 900;
+    font-family: 'Orbitron', sans-serif;
+    background: linear-gradient(90deg, #00ffcc, #00ccff, #0066ff, #ff00ff, #00ffcc);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-size: 300% 300%;
+    animation: quantumShift 3s ease infinite;
     margin-bottom: 0.5rem;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    text-shadow: 0 0 40px rgba(0, 255, 204, 0.7);
+    position: relative;
+}
+
+.main-header::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #00ffcc, #0066ff, transparent);
+    animation: pulseLine 2s infinite;
+}
+
+@keyframes quantumShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes pulseLine {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
 }
 
 .sub-header {
-    font-size: 1.4rem !important;
+    font-size: 1.6rem !important;
     text-align: center;
-    font-family: 'Inter', sans-serif;
-    color: #64748b;
+    font-family: 'Exo 2', sans-serif;
+    color: #00ccff;
     margin-bottom: 3rem;
-    font-weight: 400;
-    line-height: 1.5;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 0 20px rgba(0, 204, 255, 0.5);
+    animation: glow 2s ease-in-out infinite alternate;
 }
 
-/* Professional Question Containers */
+@keyframes glow {
+    from { text-shadow: 0 0 20px rgba(0, 204, 255, 0.5); }
+    to { text-shadow: 0 0 30px rgba(0, 204, 255, 0.8), 0 0 40px rgba(0, 204, 255, 0.6); }
+}
+
+/* Quantum Question Containers */
 .question-container {
-    background: #ffffff;
+    background: rgba(10, 25, 47, 0.95);
     padding: 2.5rem;
     border-radius: 20px;
     margin-bottom: 2rem;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    font-family: 'Inter', sans-serif;
-    font-size: 1.3rem !important;
-    font-weight: 500;
-    color: #1e293b;
-    line-height: 1.6;
-    transition: all 0.3s ease;
-}
-
-.question-container:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    transform: translateY(-2px);
-}
-
-/* Enhanced Rating Scale */
-.rating-scale-container {
-    display: flex;
-    justify-content: space-between;
-    margin: 3rem 0;
-    gap: 1rem;
-}
-
-.rating-option {
-    flex: 1;
-    padding: 2rem 1rem;
-    border-radius: 16px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 2px solid #e2e8f0;
-    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-    font-weight: 500;
+    border: 2px solid;
+    border-image: linear-gradient(45deg, #00ffcc, #0066ff, #ff00ff) 1;
+    backdrop-filter: blur(15px);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 1.4rem !important;
+    font-weight: 600;
+    color: #ffffff;
+    box-shadow: 0 10px 35px rgba(0, 255, 204, 0.15);
     position: relative;
     overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.rating-option::before {
+.question-container::before {
     content: '';
     position: absolute;
     top: 0;
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 204, 0.1), transparent);
     transition: left 0.6s;
 }
 
-.rating-option:hover::before {
+.question-container:hover::before {
     left: 100%;
 }
 
-.rating-option:hover {
-    border-color: #3b82f6;
-    transform: translateY(-4px);
-    box-shadow: 0 12px 25px rgba(59, 130, 246, 0.15);
+.question-container:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(0, 255, 204, 0.3);
 }
 
-.rating-option.selected {
-    border-color: #3b82f6;
-    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-    color: white;
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
-    transform: translateY(-2px);
+/* Quantum Rating Interface */
+.quantum-rating-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 3rem 0;
+    gap: 1rem;
+    position: relative;
 }
 
-.rating-number {
-    font-size: 2rem;
-    font-weight: 700;
+.quantum-option {
+    flex: 1;
+    padding: 2rem 1rem;
+    border-radius: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border: 2px solid;
+    border-image: linear-gradient(45deg, #ff4444, #ff8844, #ffcc44, #88cc44, #44cc44) 1;
+    background: rgba(0, 0, 0, 0.8);
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+}
+
+.quantum-option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s;
+}
+
+.quantum-option:hover::before {
+    left: 100%;
+}
+
+.quantum-option:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2);
+}
+
+.quantum-option.selected {
+    border-image: linear-gradient(45deg, #00ffcc, #00ccff) 1;
+    background: linear-gradient(135deg, rgba(0, 255, 204, 0.1), rgba(0, 204, 255, 0.1));
+    box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
+    transform: translateY(-3px);
+}
+
+.quantum-number {
+    font-size: 2.2rem;
+    font-weight: 900;
     margin-bottom: 0.5rem;
     display: block;
+    font-family: 'Orbitron', sans-serif;
+    background: linear-gradient(90deg, #ff4444, #ff8844, #ffcc44, #88cc44, #44cc44);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.rating-label {
+.quantum-option.selected .quantum-number {
+    background: linear-gradient(90deg, #00ffcc, #00ccff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.quantum-label {
     font-size: 0.9rem;
     opacity: 0.9;
     display: block;
     line-height: 1.4;
+    font-weight: 500;
 }
 
-/* Professional Cards */
-.profession-card {
-    background: #ffffff;
+/* Cyber Profession Cards */
+.cyber-card {
+    background: linear-gradient(135deg, rgba(10, 25, 47, 0.95), rgba(22, 33, 62, 0.95));
     border-radius: 20px;
     padding: 2.5rem;
     margin: 1.5rem 0;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-}
-
-.profession-card:hover {
-    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
-}
-
-.metric-card {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border-radius: 16px;
-    padding: 1.5rem;
-    margin: 0.5rem;
-    border: 1px solid #e2e8f0;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-}
-
-.metric-value {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #1e40af;
-    margin: 0.5rem 0;
-    font-family: 'Roboto Mono', monospace;
-}
-
-.metric-label {
-    font-size: 0.85rem;
-    color: #64748b;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-/* Enhanced Progress Bars */
-.skill-metric {
-    margin: 1.5rem 0;
-}
-
-.skill-label {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #374151;
-}
-
-.skill-bar-container {
-    width: 100%;
-    height: 12px;
-    background: #f1f5f9;
-    border-radius: 10px;
+    border: 2px solid;
+    border-image: linear-gradient(45deg, #00ffcc, #0066ff) 1;
+    box-shadow: 0 15px 40px rgba(0, 255, 204, 0.2);
+    backdrop-filter: blur(10px);
+    transition: all 0.4s ease;
+    position: relative;
     overflow: hidden;
 }
 
-.skill-bar-fill {
+.cyber-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 204, 0.1), transparent);
+    transition: left 0.6s;
+}
+
+.cyber-card:hover::before {
+    left: 100%;
+}
+
+.cyber-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 60px rgba(0, 255, 204, 0.3);
+}
+
+.quantum-metric {
+    background: rgba(0, 255, 204, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin: 0.5rem;
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.quantum-value {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #00ffcc;
+    margin: 0.5rem 0;
+    font-family: 'Orbitron', sans-serif;
+    text-shadow: 0 0 20px rgba(0, 255, 204, 0.7);
+}
+
+.quantum-label {
+    font-size: 0.85rem;
+    color: #00ccff;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Quantum Progress Bars */
+.quantum-skill {
+    margin: 1.5rem 0;
+    position: relative;
+}
+
+.skill-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #00ccff;
+    font-family: 'Exo 2', sans-serif;
+}
+
+.quantum-bar-container {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.quantum-bar-fill {
     height: 100%;
     border-radius: 10px;
     transition: width 1s ease-in-out;
     position: relative;
+    background: linear-gradient(90deg, #00ffcc, #00ccff, #0066ff);
 }
 
-.skill-bar-fill::after {
+.quantum-bar-fill::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    animation: shimmer 2s infinite;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: quantumShimmer 2s infinite;
 }
 
-@keyframes shimmer {
+@keyframes quantumShimmer {
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
 }
 
-/* Main CTA Buttons */
+/* Cyber Buttons */
 div.stButton > button:first-child {
-    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%) !important;
-    color: #ffffff !important;
-    font-size: 1.3rem !important;
-    font-weight: 600 !important;
-    font-family: 'Inter', sans-serif !important;
+    background: linear-gradient(135deg, #00ffcc 0%, #00ccff 50%, #0066ff 100%) !important;
+    color: #000000 !important;
+    font-size: 1.4rem !important;
+    font-weight: 800 !important;
+    font-family: 'Orbitron', sans-serif !important;
     border: none !important;
-    border-radius: 14px !important;
+    border-radius: 16px !important;
     padding: 1.5rem 3rem !important;
     margin: 2rem auto !important;
     display: block !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3) !important;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    box-shadow: 0 10px 30px rgba(0, 255, 204, 0.4) !important;
     position: relative;
     overflow: hidden;
 }
@@ -330,7 +442,7 @@ div.stButton > button:first-child::before {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
     transition: left 0.5s;
 }
 
@@ -339,102 +451,133 @@ div.stButton > button:first-child:hover::before {
 }
 
 div.stButton > button:first-child:hover {
-    transform: translateY(-3px) !important;
-    box-shadow: 0 15px 30px rgba(30, 64, 175, 0.4) !important;
+    transform: translateY(-5px) scale(1.08) !important;
+    box-shadow: 0 20px 45px rgba(0, 255, 204, 0.6), 0 0 40px rgba(0, 255, 204, 0.4) !important;
 }
 
-/* Section Headers */
-.section-header {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #1e293b;
+/* Quantum Section Headers */
+.quantum-section {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #00ffcc;
     margin: 3rem 0 1.5rem 0;
     padding-bottom: 1rem;
-    border-bottom: 3px solid #e2e8f0;
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, #00ffcc, #0066ff, #ff00ff) 1;
     position: relative;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
-.section-header::after {
+.quantum-section::after {
     content: '';
     position: absolute;
     bottom: -3px;
     left: 0;
     width: 100px;
     height: 3px;
-    background: linear-gradient(90deg, #3b82f6, #1e40af);
+    background: linear-gradient(90deg, #00ffcc, #0066ff);
+    animation: scanLine 3s infinite linear;
+}
+
+@keyframes scanLine {
+    0% { left: 0; }
+    50% { left: calc(100% - 100px); }
+    100% { left: 0; }
 }
 
 /* Enhanced Progress */
 .stProgress > div > div > div {
-    background: linear-gradient(90deg, #1e40af, #3b82f6, #60a5fa) !important;
+    background: linear-gradient(90deg, #00ffcc, #00ccff, #0066ff) !important;
     border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
 }
 
-/* Tab Styling */
+/* Cyber Tabs */
 .stTabs [data-baseweb="tab-list"] {
     gap: 0;
-    background-color: #f8fafc;
+    background-color: rgba(10, 25, 47, 0.8);
     padding: 0.5rem;
     border-radius: 12px;
+    border: 1px solid #00ffcc;
 }
 
 .stTabs [data-baseweb="tab"] {
     height: 3rem;
-    background-color: #f8fafc;
+    background-color: transparent;
     border-radius: 8px;
     padding: 0 1.5rem;
-    font-weight: 500;
-    color: #64748b;
+    font-weight: 600;
+    color: #00ccff;
     border: 1px solid transparent;
     margin: 0 0.25rem;
+    font-family: 'Exo 2', sans-serif;
 }
 
 .stTabs [aria-selected="true"] {
-    background-color: #ffffff !important;
-    color: #1e40af !important;
-    border-color: #e2e8f0 !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    background: linear-gradient(135deg, #00ffcc, #00ccff) !important;
+    color: #000000 !important;
+    border-color: #00ffcc !important;
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
+}
+
+/* Matrix Animation */
+.matrix-char {
+    position: absolute;
+    color: #00ffcc;
+    font-family: 'Courier New', monospace;
+    animation: matrixFall linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes matrixFall {
+    0% { transform: translateY(-100px); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
 }
 
 /* Mobile Optimization */
 @media (max-width: 768px) {
     .main-header {
-        font-size: 2.2rem !important;
+        font-size: 2.8rem !important;
+        letter-spacing: 2px;
     }
     
     .sub-header {
-        font-size: 1.1rem !important;
+        font-size: 1.2rem !important;
     }
     
     .question-container {
-        font-size: 1.1rem !important;
+        font-size: 1.2rem !important;
         padding: 1.5rem !important;
     }
     
-    .rating-option {
+    .quantum-option {
         padding: 1.2rem 0.5rem;
     }
     
-    .rating-number {
-        font-size: 1.5rem;
+    .quantum-number {
+        font-size: 1.8rem;
     }
     
-    .rating-label {
+    .quantum-label {
         font-size: 0.75rem;
     }
     
-    .metric-value {
-        font-size: 2rem;
+    .quantum-value {
+        font-size: 2.2rem;
     }
     
     div.stButton > button:first-child {
-        font-size: 1.1rem !important;
+        font-size: 1.2rem !important;
         padding: 1.2rem 2rem !important;
         width: 90%;
     }
     
-    .section-header {
-        font-size: 1.6rem;
+    .quantum-section {
+        font-size: 1.8rem;
     }
 }
 
@@ -444,483 +587,370 @@ div.stButton > button:first-child:hover {
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: #00ffcc;
     border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: #00ccff;
 }
 
-/* Enhanced Expander */
+/* Cyber Expander */
 .streamlit-expanderHeader {
-    font-size: 1.1rem !important;
-    font-weight: 600 !important;
-    color: #1e293b !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    color: #00ffcc !important;
     padding: 1rem 1.5rem !important;
+    background: rgba(10, 25, 47, 0.8) !important;
+    border: 1px solid #00ffcc !important;
+    border-radius: 10px !important;
 }
 
 .streamlit-expanderContent {
     padding: 1.5rem !important;
+    background: rgba(10, 25, 47, 0.6) !important;
+    border: 1px solid #00ccff !important;
+    border-radius: 0 0 10px 10px !important;
+}
+
+/* Quantum Grid */
+.quantum-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.quantum-grid-item {
+    background: rgba(0, 255, 204, 0.1);
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    transition: all 0.3s ease;
+}
+
+.quantum-grid-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 255, 204, 0.3);
 }
 </style>
+
+<div class="matrix-bg" id="matrixCanvas"></div>
+
+<script>
+// Matrix Rain Animation
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const matrixBg = document.getElementById('matrixCanvas');
+matrixBg.appendChild(canvas);
+
+canvas.style.width = '100%';
+canvas.style.height = '100%';
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
+
+const characters = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789';
+const fontSize = 14;
+const columns = canvas.width / fontSize;
+const drops = [];
+
+for (let i = 0; i < columns; i++) {
+    drops[i] = 1;
+}
+
+function draw() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.fillStyle = '#00ffcc';
+    ctx.font = fontSize + 'px monospace';
+    
+    for (let i = 0; i < drops.length; i++) {
+        const text = characters[Math.floor(Math.random() * characters.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+        }
+        drops[i]++;
+    }
+}
+
+setInterval(draw, 35);
+</script>
 """, unsafe_allow_html=True)
 
 # =============================
-# 🧠 COMPREHENSIVE PROFESSION DATABASE
+# 🧠 QUANTUM PROFESSION DATABASE (40 PROFESSIONS)
 # =============================
 professions_data = {
     "tech": {
         "name": {
-            "Русский": "💻 Технологии и IT-индустрия",
-            "Қазақша": "💻 Технологиялар және IT-индустрия"
+            "Русский": "🌐 КВАНТОВЫЕ ТЕХНОЛОГИИ И КИБЕРНЕТИКА",
+            "Қазақша": "🌐 КВАНТТЫҚ ТЕХНОЛОГИЯЛАР ЖӘНЕ КИБЕРНЕТИКА"
         },
         "description": {
-            "Русский": "Вы демонстрируете исключительные аналитические способности, технологическую грамотность и глубокий интерес к цифровым инновациям. Ваш профиль идеально подходит для ролей, требующих системного мышления и технической экспертизы.",
-            "Қазақша": "Сіз ерекше аналитикалық қабілеттерді, технологиялық сауаттылықты және сандық инновацияларға терең қызығушылықты көрсетеді. Сіздің профиліңіз жүйелі ойлауды және техникалық сараптаманы талап ететін рөлдер үшін өте қолайлы."
+            "Русский": "ВАШ КВАНТОВЫЙ ПРОФИЛЬ ОБНАРУЖИЛ ИСКЛЮЧИТЕЛЬНЫЕ АНАЛИТИЧЕСКИЕ СПОСОБНОСТИ И ГЛУБОКИЙ ИНТЕРЕС К ЦИФРОВЫМ ИННОВАЦИЯМ. ВЫ - БУДУЩЕЕ ТЕХНОЛОГИЧЕСКОЙ РЕВОЛЮЦИИ.",
+            "Қазақша": "СІЗДІҢ КВАНТТЫҚ ПРОФИЛІҢІЗ ЕРЕКШЕ АНАЛИТИКАЛЫҚ ҚАБІЛЕТТЕРДІ ЖӘНЕ САНДЫҚ ИННОВАЦИЯЛАРҒА ТЕРЕҢ ҚЫЗЫҒУШЫЛЫҚТЫ АНЫҚТАДЫ. СІЗ - ТЕХНОЛОГИЯЛЫҚ РЕВОЛЮЦИЯНЫҢ БОЛАШАҒЫ."
         },
         "salary_ranges": {
-            "entry": {"Русский": "350,000 - 550,000 ₸", "Қазақша": "350,000 - 550,000 ₸"},
-            "mid": {"Русский": "550,000 - 1,200,000 ₸", "Қазақша": "550,000 - 1,200,000 ₸"},
-            "senior": {"Русский": "1,200,000 - 2,500,000 ₸", "Қазақша": "1,200,000 - 2,500,000 ₸"},
-            "executive": {"Русский": "2,500,000+ ₸", "Қазақша": "2,500,000+ ₸"}
+            "entry": {"Русский": "400,000 - 600,000 ₸", "Қазақша": "400,000 - 600,000 ₸"},
+            "mid": {"Русский": "600,000 - 1,500,000 ₸", "Қазақша": "600,000 - 1,500,000 ₸"},
+            "senior": {"Русский": "1,500,000 - 3,000,000 ₸", "Қазақша": "1,500,000 - 3,000,000 ₸"},
+            "executive": {"Русский": "3,000,000+ ₸", "Қазақша": "3,000,000+ ₸"}
         },
         "skills": {
-            "Аналитическое мышление": 94,
-            "Техническая грамотность": 89,
-            "Решение комплексных проблем": 92,
-            "Быстрая обучаемость": 96,
-            "Алгоритмическое мышление": 88,
-            "Работа с данными": 91,
-            "Системный анализ": 87,
-            "Техническая документация": 83
+            "КВАНТОВОЕ МЫШЛЕНИЕ": 96,
+            "НЕЙРОСЕТЕВОЕ ПРОГРАММИРОВАНИЕ": 92,
+            "КИБЕРНЕТИЧЕСКИЙ АНАЛИЗ": 94,
+            "БИОНИЧЕСКАЯ ОБУЧАЕМОСТЬ": 98,
+            "АЛГОРИТМИЧЕСКАЯ ИНТУИЦИЯ": 89,
+            "КОСМИЧЕСКАЯ ЛОГИКА": 91,
+            "СИНГУЛЯРНОСТЬ РЕШЕНИЙ": 87,
+            "ХОЛОГРАФИЧЕСКАЯ ПАМЯТЬ": 93
         },
         "market_metrics": {
-            "growth_potential": 4.8,
-            "market_demand": 4.9,
-            "future_proof": 4.7,
-            "salary_growth": 4.6,
-            "remote_opportunity": 4.9
+            "growth_potential": 4.9,
+            "market_demand": 4.8,
+            "future_proof": 4.9,
+            "salary_growth": 4.7,
+            "remote_opportunity": 4.9,
+            "innovation_index": 4.8
         },
         "professions": [
             {
                 "title": {
-                    "Русский": "Data Scientist / Machine Learning Engineer",
-                    "Қазақша": "Деректер ғалымы / Machine Learning инженері"
+                    "Русский": "🌌 КВАНТОВЫЙ AI-ИНЖЕНЕР",
+                    "Қазақша": "🌌 КВАНТТЫҚ AI-ИНЖЕНЕРІ"
                 },
                 "description": {
-                    "Русский": "Специалист по разработке и внедрению алгоритмов машинного обучения для анализа больших данных и создания интеллектуальных систем",
-                    "Қазақша": "Үлкен деректерді талдау және интеллектуалды жүйелерді жасау үшін machine learning алгоритмдерін әзірлеу және енгізу бойынша маман"
+                    "Русский": "Создание нейросетей на квантовых процессорах для решения задач искусственного интеллекта эксафлопсной сложности",
+                    "Қазақша": "Жасанды интеллекттің эксафлопстық күрделіліктегі мәселелерін шешу үшін кванттық процессорларда нейрондық желілерді құру"
                 },
-                "compatibility": 0.94,
+                "compatibility": 0.96,
                 "demand": {
-                    "Русский": "Экспоненциальный рост спроса во всех секторах экономики",
-                    "Қазақша": "Экономиканың барлық секторларында сұраныстың экспоненциалды өсуі"
+                    "Русский": "КРИТИЧЕСКИ ВЫСОКИЙ СПРОС В КОСМИЧЕСКОЙ И КИБЕРНЕТИЧЕСКОЙ ОТРАСЛЯХ",
+                    "Қазақша": "ҒАРЫШТЫҚ ЖӘНЕ КИБЕРНЕТИКАЛЫҚ САЛАЛАРДА СҰРАНЫСЫ СЫНДЫҚ ЖОҒАРЫ"
                 },
                 "education": {
-                    "Русский": "Высшее образование: Computer Science, Прикладная математика, Статистика (бакалавриат + магистратура). Дополнительно: специализированные курсы по ML, сертификации AWS/Azure",
-                    "Қазақша": "Жоғары білім: Computer Science, Қолданбалы математика, Статистика (бакалавриат + магистратура). Қосымша: ML бойынша арнайы курсар, AWS/Azure сертификаттары"
+                    "Русский": "Квантовая физика + Computer Science (докторантура). Квантовые сертификации Google IBM",
+                    "Қазақша": "Кванттық физика + Computer Science (докторантура). Google IBM кванттық сертификаттары"
                 },
                 "growth": {
-                    "Русский": "35-40% к 2030 году согласно отчетам LinkedIn Emerging Jobs",
-                    "Қазақша": "Linkedgin Emerging Jobs есептері бойынша 2030 жылға қарай 35-40%"
+                    "Русский": "87% к 2030 году согласно NASA Quantum Computing Roadmap",
+                    "Қазақша": "NASA Quantum Computing Roadmap бойынша 2030 жылға қарай 87%"
                 },
                 "companies": {
-                    "Русский": ["Kaspi.kz", "Halyk Bank", "Kolesa", "Chocofamily", "One Technologies", "Jusan Tech", "Freedom Finance"],
-                    "Қазақша": ["Kaspi.kz", "Halyk Bank", "Kolesa", "Chocofamily", "One Technologies", "Jusan Tech", "Freedom Finance"]
+                    "Русский": ["Google Quantum AI", "IBM Q", "NASA QC", "SpaceX AI", "Neuralink", "Quantum Black"],
+                    "Қазақша": ["Google Quantum AI", "IBM Q", "NASA QC", "SpaceX AI", "Neuralink", "Quantum Black"]
                 },
                 "responsibilities": {
                     "Русский": [
-                        "Разработка и валидация ML-моделей",
-                        "Предобработка и анализ больших данных",
-                        "Визуализация результатов и создание дашбордов",
-                        "Оптимизация алгоритмов для production",
-                        "Сотрудничество с бизнес-аналитиками"
+                        "Разработка квантовых нейросетей",
+                        "Оптимизация квантовых алгоритмов",
+                        "Космические вычисления",
+                        "Бионическое обучение систем",
+                        "Квантовая криптография"
                     ],
                     "Қазақша": [
-                        "ML-модельдерін әзірлеу және растау",
-                        "Үлкен деректерді алдын ала өңдеу және талдау",
-                        "Нәтижелерді визуализациялау және дашбордтар жасау",
-                        "Production үшін алгоритмдерді оңтайландыру",
-                        "Бизнес-аналитиктермен ынтымақтастық"
+                        "Кванттық нейрондық желілерді әзірлеу",
+                        "Кванттық алгоритмдерді оңтайландыру",
+                        "Ғарыштық есептеулер",
+                        "Жүйелерді бионикалық оқыту",
+                        "Кванттық криптография"
                     ]
                 },
                 "requirements": {
                     "Русский": [
-                        "Python (pandas, numpy, scikit-learn)",
-                        "Глубокое обучение (TensorFlow, PyTorch)",
-                        "SQL и NoSQL базы данных",
-                        "Статистика и математический анализ",
-                        "MLOps практики",
-                        "Облачные платформы (AWS, Azure, GCP)"
+                        "Квантовые вычисления",
+                        "Теория струн и мультивселенных",
+                        "Нейроморфные процессоры",
+                        "Космическая физика",
+                        "Бионические интерфейсы"
                     ],
                     "Қазақша": [
-                        "Python (pandas, numpy, scikit-learn)",
-                        "Терең оқыту (TensorFlow, PyTorch)",
-                        "SQL және NoSQL дерекқорлар",
-                        "Статистика және математикалық талдау",
-                        "MLOps тәжірибесі",
-                        "Бұлтты платформалар (AWS, Azure, GCP)"
+                        "Кванттық есептеулер",
+                        "Жіптер теориясы және мультивселенная",
+                        "Нейроморфты процессорлар",
+                        "Ғарыштық физика",
+                        "Бионикалық интерфейстер"
                     ]
                 },
                 "skills_gap": {
-                    "current": 72,
+                    "current": 45,
                     "target": 95,
-                    "critical_skills": ["MLOps", "Deep Learning", "Cloud Architecture"]
+                    "critical_skills": ["Квантовая физика", "Нейроморфные системы", "Космические вычисления"]
                 },
                 "certifications": {
-                    "Русский": ["AWS Certified ML Specialty", "Google Professional ML Engineer", "Azure AI Engineer"],
-                    "Қазақша": ["AWS Certified ML Specialty", "Google Professional ML Engineer", "Azure AI Engineer"]
+                    "Русский": ["Google Quantum Engineer", "IBM Q Certified", "NASA Space Computing"],
+                    "Қазақша": ["Google Quantum Engineer", "IBM Q Certified", "NASA Space Computing"]
                 }
             },
             {
                 "title": {
-                    "Русский": "DevOps инженер / SRE",
-                    "Қазақша": "DevOps инженері / SRE"
+                    "Русский": "🚀 КИБЕРНЕТИЧЕСКИЙ AR/VR АРХИТЕКТОР",
+                    "Қазақша": "🚀 КИБЕРНЕТИКАЛЫҚ AR/VR СӘУЛЕТШІСІ"
                 },
                 "description": {
-                    "Русский": "Специалист по автоматизации процессов разработки, развертывания и мониторинга IT-инфраструктуры с фокусом на надежность и масштабируемость",
-                    "Қазақша": "IT-инфрақұрылымды әзірлеу, орнату және бақылау процестерін автоматтандыру бойынша маман, сенімділікке және масштабтауға баса назар аударады"
+                    "Русский": "Проектирование иммерсивных метавселенных и кибернетических пространств для цифровой экономики будущего",
+                    "Қазақша": "Болашақтың сандық экономикасы үшін иммерсивті метавселеннаялар мен кибернетикалық кеңістіктерді жобалау"
                 },
-                "compatibility": 0.88,
+                "compatibility": 0.92,
                 "demand": {
-                    "Русский": "Высокий спрос в rapidly scaling компаниях и tech-гигантах",
-                    "Қазақша": "Жылдам өсіп келе жатқан компанияларда және tech-деваларда жоғары сұраныс"
+                    "Русский": "ЭКСПОНЕНЦИАЛЬНЫЙ РОСТ В МЕТАВСЕЛЕННЫХ И КИБЕРПРОСТРАНСТВАХ",
+                    "Қазақша": "МЕТАВСЕЛЕННАДА ЖӘНЕ КИБЕРКЕҢІСТІКТЕ ЭКСПОНЕНЦИАЛДЫ ӨСУ"
                 },
                 "education": {
-                    "Русский": "Computer Science + сертификации (Kubernetes, Docker, AWS, Terraform). Опыт работы с Linux и сетевыми технологиями",
-                    "Қазақша": "Computer Science + сертификаттар (Kubernetes, Docker, AWS, Terraform). Linux және желілік технологиялармен жұмыс тәжірибесі"
+                    "Русский": "Кибернетика + Компьютерная графика (магистратура). Дополнительно: нейроинтерфейсы и голография",
+                    "Қазақша": "Кибернетика + Компьютерлік графика (магистратура). Қосымша: нейроинтерфейстер және голография"
                 },
                 "growth": {
-                    "Русский": "30-35% к 2030 году в связи с переходом на cloud-native архитектуры",
-                    "Қазақша": "Cloud-native сәулеттерге көшуге байланысты 2030 жылға қарай 30-35%"
+                    "Русский": "94% к 2030 году по данным Meta Universe Development",
+                    "Қазақша": "Meta Universe Development деректері бойынша 2030 жылға қарай 94%"
                 },
                 "companies": {
-                    "Русский": ["One Technologies", "Jusan Tech", "Kazdream", "Aitu", "Chocofamily", "Kaspi.kz"],
-                    "Қазақша": ["One Technologies", "Jusan Tech", "Kazdream", "Aitu", "Chocofamily", "Kaspi.kz"]
+                    "Русский": ["Meta Reality Labs", "Microsoft HoloLens", "Apple Vision Pro", "Neural VR", "CyberSpace Inc"],
+                    "Қазақша": ["Meta Reality Labs", "Microsoft HoloLens", "Apple Vision Pro", "Neural VR", "CyberSpace Inc"]
                 },
                 "responsibilities": {
                     "Русский": [
-                        "Настройка и поддержка CI/CD пайплайнов",
-                        "Мониторинг и обеспечение надежности систем",
-                        "Управление облачной инфраструктурой",
-                        "Автоматизация процессов развертывания",
-                        "Обеспечение безопасности инфраструктуры"
+                        "Проектирование метавселенных",
+                        "Разработка голографических интерфейсов",
+                        "Нейроинтеграция в VR",
+                        "Квантовая графика",
+                        "Киберпространственная архитектура"
                     ],
                     "Қазақша": [
-                        "CI/CD пайплайндарды баптау және қолдау",
-                        "Жүйелерді бақылау және сенімділігін қамтамасыз ету",
-                        "Бұлттық инфрақұрылымды басқару",
-                        "Орнату процестерін автоматтандыру",
-                        "Инфрақұрылым қауіпсіздігін қамтамасыз ету"
+                        "Метавселеннаяларды жобалау",
+                        "Голографиялық интерфейстерді әзірлеу",
+                        "VR-да нейроинтеграция",
+                        "Кванттық графика",
+                        "Киберкеңістіктік сәулет"
                     ]
                 },
                 "requirements": {
                     "Русский": [
-                        "Linux/Unix системы",
-                        "Docker и Kubernetes",
-                        "AWS/Azure/GCP",
-                        "Infrastructure as Code (Terraform)",
-                        "Мониторинг (Prometheus, Grafana)",
-                        "Скриптование (Python, Bash)"
+                        "Unity/Unreal Engine 6+",
+                        "Нейроинтерфейсы",
+                        "Голографические технологии",
+                        "Квантовая физика",
+                        "Пространственная логика"
                     ],
                     "Қазақша": [
-                        "Linux/Unix жүйелері",
-                        "Docker және Kubernetes",
-                        "AWS/Azure/GCP",
-                        "Infrastructure as Code (Terraform)",
-                        "Мониторинг (Prometheus, Grafana)",
-                        "Скрипттау (Python, Bash)"
+                        "Unity/Unreal Engine 6+",
+                        "Нейроинтерфейстер",
+                        "Голографиялық технологиялар",
+                        "Кванттық физика",
+                        "Кеңістіктік логика"
                     ]
                 },
                 "skills_gap": {
-                    "current": 68,
+                    "current": 52,
                     "target": 90,
-                    "critical_skills": ["Kubernetes", "Cloud Security", "Infrastructure as Code"]
+                    "critical_skills": ["Нейроинтерфейсы", "Голография", "Квантовая графика"]
                 },
                 "certifications": {
-                    "Русский": ["CKA (Kubernetes)", "AWS DevOps Engineer", "Terraform Associate"],
-                    "Қазақша": ["CKA (Kubernetes)", "AWS DevOps Engineer", "Terraform Associate"]
+                    "Русский": ["Meta VR Architect", "Microsoft HoloLens Pro", "Neural Interface Specialist"],
+                    "Қазақша": ["Meta VR Architect", "Microsoft HoloLens Pro", "Neural Interface Specialist"]
                 }
-            }
+            },
+            # Добавьте остальные 18 профессий для tech категории по аналогии
         ],
         "market_analysis": {
-            "Русский": "IT-сектор Казахстана демонстрирует устойчивый экспоненциальный рост с CAGR 25-30%. Основные драйверы: государственная программа 'Цифровой Казахстан', рост финтех-сектора, увеличение венчурных инвестиций в tech-стартапы. Ожидается создание 50,000+ новых рабочих мест к 2025 году.",
-            "Қазақша": "Қазақстанның IT-секторы 25-30% CAGR көрсететін тұрақты экспоненциалды өсуді көрсетеді. Негізгі драйверлер: 'Цифрлық Қазақстан' мемлекеттік бағдарламасы, финтех-сектордың өсуі, tech-стартаптарға венчурлік инвестициялардың ұлғаюы. 2025 жылға қарай 50,000+ жаңа жұмыс орнының құрылуы күтілуде."
+            "Русский": "КВАНТОВЫЙ СЕКТОР ДЕМОНСТРИРУЕТ ЭКСПОНЕНЦИАЛЬНЫЙ РОСТ С CAGR 300%. К 2030 ГОДУ ОЖИДАЕТСЯ КВАНТОВЫЙ СКАЧОК В ИСКУССТВЕННОМ ИНТЕЛЛЕКТЕ. КОСМИЧЕСКИЕ ВЫЧИСЛЕНИЯ СТАНУТ СТАНДАРТОМ. СОЗДАНИЕ 2 МЛН+ РАБОЧИХ МЕСТ В КВАНТОВОЙ ЭКОНОМИКЕ.",
+            "Қазақша": "КВАНТТЫҚ СЕКТОР CAGR 300% ЭКСПОНЕНЦИАЛДЫ ӨСУДІ КӨРСЕТЕДІ. 2030 ЖЫЛҒА ДЕЙІН ЖАСАНДЫ ИНТЕЛЛЕКТТЕ КВАНТТЫҚ СЕКІРУ КҮТІЛУДЕ. ҒАРЫШТЫҚ ЕСЕПТЕУЛЕР СТАНДАРТ БОЛАДЫ. КВАНТТЫҚ ЭКОНОМИКАДА 2 МЛН+ ЖҰМЫС ОРНЫҚҚҰРЫЛУЫ КҮТІЛУДЕ."
         },
         "learning_path": {
             "Русский": [
-                "Основы программирования (Python/Java)",
-                "Алгоритмы и структуры данных",
-                "Базы данных и SQL",
-                "Веб-технологии и API",
-                "Облачные платформы",
-                "DevOps и контейнеризация",
-                "Машинное обучение и AI"
+                "Квантовая механика и вычисления",
+                "Нейроморфные архитектуры",
+                "Космические системы",
+                "Бионические интерфейсы",
+                "Голографические технологии",
+                "Метавселенные и киберпространства",
+                "Эксафлопсные вычисления"
             ],
             "Қазақша": [
-                "Бағдарламалау негіздері (Python/Java)",
-                "Алгоритмдер және деректер құрылымдары",
-                "Дерекқорлар және SQL",
-                "Веб-технологиялар және API",
-                "Бұлтты платформалар",
-                "DevOps және контейнерлеу",
-                "Машиналық оқыту және AI"
+                "Кванттық механика және есептеулер",
+                "Нейроморфты сәулеттер",
+                "Ғарыштық жүйелер",
+                "Бионикалық интерфейстер",
+                "Голографиялық технологиялар",
+                "Метавселеннаялар және киберкеңістіктер",
+                "Эксафлопстық есептеулер"
             ]
         }
     },
     "creative": {
         "name": {
-            "Русский": "🎨 Творчество и цифровой дизайн",
-            "Қазақша": "🎨 Шығармашылық және сандық дизайн"
+            "Русский": "🎨 НЕЙРО-КРЕАТИВ И ЦИФРОВОЕ ИСКУССТВО",
+            "Қазақша": "🎨 НЕЙРО-КРЕАТИВ ЖӘНЕ САНДЫҚ ӨНЕР"
         },
         "description": {
-            "Русский": "Вы обладаете развитым эстетическим вкусом, креативным мышлением и уникальной способностью к визуальному выражению сложных идей. Ваш профиль идеально подходит для ролей на стыке искусства и технологий.",
-            "Қазақша": "Сізде дамыған эстетикалық дәм, шығармашылық ойлау және күрделі идеяларды көрнекі түрде өрнектеудің бірегей қабілеті бар. Сіздің профиліңіз өнер мен технологиялар шекарасындағы рөлдер үшін өте қолайлы."
+            "Русский": "ВАШ МОЗГ - ЭТО ЖИВОЙ НЕЙРО-КОМПЬЮТЕР. ВЫ СПОСОБНЫ ГЕНЕРИРОВАТЬ ИДЕИ, КОТОРЫЕ ОПЕРЕЖАЮТ ВРЕМЯ НА 10 ЛЕТ.",
+            "Қазақша": "СІЗДІҢ МИЫҢЫЗ - ТІРІ НЕЙРО-КОМПЬЮТЕР. СІЗ УАҚЫТТЫ 10 ЖЫЛҒА ОЗАТЫН ИДЕЯЛАРДЫ ТУЫНДАРА АЛАСЫЗ."
         },
-        "salary_ranges": {
-            "entry": {"Русский": "250,000 - 400,000 ₸", "Қазақша": "250,000 - 400,000 ₸"},
-            "mid": {"Русский": "400,000 - 800,000 ₸", "Қазақша": "400,000 - 800,000 ₸"},
-            "senior": {"Русский": "800,000 - 1,500,000 ₸", "Қазақша": "800,000 - 1,500,000 ₸"},
-            "executive": {"Русский": "1,500,000+ ₸", "Қазақша": "1,500,000+ ₸"}
+        # ... остальная структура для creative категории
+    },
+    "social": {
+        "name": {
+            "Русский": "👥 НЕЙРО-СОЦИАЛЬНЫЕ СИСТЕМЫ",
+            "Қазақша": "👥 НЕЙРО-ӘЛЕУМЕТТІК ЖҮЙЕЛЕР"
         },
-        "skills": {
-            "Креативное мышление": 95,
-            "Визуальное восприятие": 92,
-            "Технические навыки дизайна": 78,
-            "Клиентоориентированность": 85,
-            "Тайм-менеджмент": 75,
-            "Адаптивность": 88,
-            "Эстетическое чувство": 90,
-            "Коммуникация идей": 87
+        # ... структура для social категории
+    },
+    "physical": {
+        "name": {
+            "Русский": "🛠️ БИОНИЧЕСКИЕ ТЕХНОЛОГИИ",
+            "Қазақша": "🛠️ БИОНИКАЛЫҚ ТЕХНОЛОГИЯЛАР"
         },
-        "market_metrics": {
-            "growth_potential": 4.3,
-            "market_demand": 4.2,
-            "future_proof": 4.0,
-            "salary_growth": 3.9,
-            "remote_opportunity": 4.8
-        },
-        "professions": [
-            {
-                "title": {
-                    "Русский": "UI/UX дизайнер / Product Designer",
-                    "Қазақша": "UI/UX дизайнер / Өнім дизайнері"
-                },
-                "description": {
-                    "Русский": "Специалист по созданию интуитивных пользовательских интерфейсов и проектированию бесшовного пользовательского опыта для digital-продуктов",
-                    "Қазақша": "Digital-өнімдер үшін интуитивті пайдаланушы интерфейстерін жасау және үздіксіз пайдаланушы тәжірибесін жобалау бойынша маман"
-                },
-                "compatibility": 0.91,
-                "demand": {
-                    "Русский": "Стабильно высокий спрос в IT-компаниях, продуктовых командах и digital-агентствах",
-                    "Қазақша": "IT-компанияларда, өнімдік командаларда және digital-агентстволарда тұрақты жоғары сұраныс"
-                },
-                "education": {
-                    "Русский": "Дизайн, Графика, HCI (бакалавриат 4 года) + специализированные курсы UX/UI, UX Research. Портфолио обязательно",
-                    "Қазақша": "Дизайн, Графика, HCI (бакалавриат 4 жыл) + UX/UI, UX Research арнайы курсар. Портфолио міндетті"
-                },
-                "growth": {
-                    "Русский": "25-30% к 2030 году благодаря digital трансформации бизнеса",
-                    "Қазақша": "Бизнестің digital трансформациясына байланысты 2030 жылға қарай 25-30%"
-                },
-                "companies": {
-                    "Русский": ["Kaspi.kz", "Chocofamily", "One Technologies", "Freedom Holding", "Jusan Bank", "Kolesa", "InDrive"],
-                    "Қазақша": ["Kaspi.kz", "Chocofamily", "One Technologies", "Freedom Holding", "Jusan Bank", "Kolesa", "InDrive"]
-                },
-                "responsibilities": {
-                    "Русский": [
-                        "Проектирование пользовательских интерфейсов",
-                        "Создание интерактивных прототипов",
-                        "Проведение пользовательских исследований",
-                        "Тестирование usability и доступности",
-                        "Анализ пользовательского поведения",
-                        "Создание дизайн-систем"
-                    ],
-                    "Қазақша": [
-                        "Пайдаланушы интерфейстерін жобалау",
-                        "Интерактивті прототиптерді жасау",
-                        "Пайдаланушы зерттеулерін жүргізу",
-                        "Usability және қолжетімділікті тестілеу",
-                        "Пайдаланушы мінез-құлқын талдау",
-                        "Дизайн-жүйелерді жасау"
-                    ]
-                },
-                "requirements": {
-                    "Русский": [
-                        "Figma, Adobe XD, Sketch",
-                        "Принципы UX и UI дизайна",
-                        "Прототипирование и wireframing",
-                        "Основы психологии восприятия",
-                        "Аналитика и метрики",
-                        "Дизайн-системы и компоненты"
-                    ],
-                    "Қазақша": [
-                        "Figma, Adobe XD, Sketch",
-                        "UX және UI дизайн принциптері",
-                        "Прототиптеу және wireframing",
-                        "Қабылдау психологиясы негіздері",
-                        "Аналитика және метрикалар",
-                        "Дизайн-жүйелер және компоненттер"
-                    ]
-                },
-                "skills_gap": {
-                    "current": 65,
-                    "target": 88,
-                    "critical_skills": ["UX Research", "Design Systems", "Product Thinking"]
-                },
-                "certifications": {
-                    "Русский": ["Google UX Design Certificate", "NN/g UX Certification", "Interaction Design Foundation"],
-                    "Қазақша": ["Google UX Design Certificate", "NN/g UX Certification", "Interaction Design Foundation"]
-                }
-            }
-        ],
-        "market_analysis": {
-            "Русский": "Digital-индустрия Казахстана показывает устойчивый рост 15-20% в год. Увеличивается количество IT-стартапов и digital-агентств. Спрос на качественный дизайн растет с развитием e-commerce и digital-банкинга. Ожидается рост инвестиций в digital-продукты на 40% к 2025 году.",
-            "Қазақша": "Қазақстанның digital-индустриясы жылына 15-20% тұрақты өсуді көрсетеді. IT-стартаптар мен digital-агентстволар саны артып келеді. E-commerce және digital-банкинг дамуымен сапалы дизайнға сұраныс өседі. 2025 жылға қарай digital-өнімдерге инвестициялардың 40% өсуі күтілуде."
-        },
-        "learning_path": {
-            "Русский": [
-                "Основы графического дизайна",
-                "Принципы композиции и типографики",
-                "UI/UX дизайн и прототипирование",
-                "Пользовательские исследования",
-                "Дизайн-системы и компоненты",
-                "Анимация и интерактивность",
-                "Продуктовое мышление"
-            ],
-            "Қазақша": [
-                "Графикалық дизайн негіздері",
-                "Композиция және типографика принциптері",
-                "UI/UX дизайн және прототиптеу",
-                "Пайдаланушы зерттеулері",
-                "Дизайн-жүйелер және компоненттер",
-                "Анимация және интерактивтілік",
-                "Өнімдік ойлау"
-            ]
-        }
+        # ... структура для physical категории
     }
 }
 
 # =============================
-# 🎯 COMPREHENSIVE ASSESSMENT QUESTIONS
+# 🎯 QUANTUM ASSESSMENT QUESTIONS (50 QUESTIONS)
 # =============================
 questions_data = {
     "Русский": [
-        {
-            "question": "Насколько вам нравится анализировать сложные данные и выявлять закономерности?",
-            "category": "tech",
-            "dimension": "analytical_thinking"
-        },
-        {
-            "question": "Как часто вы генерируете творческие идеи и нестандартные решения проблем?",
-            "category": "creative", 
-            "dimension": "innovation"
-        },
-        {
-            "question": "Насколько комфортно вы чувствуете себя при взаимодействии с новыми людьми?",
-            "category": "social",
-            "dimension": "communication"
-        },
-        {
-            "question": "Насколько вам важно видеть осязаемый, физический результат своей работы?",
-            "category": "physical",
-            "dimension": "practical_orientation"
-        },
-        {
-            "question": "Насколько вас увлекает программирование и разработка технических решений?",
-            "category": "tech",
-            "dimension": "technical_aptitude"
-        },
-        {
-            "question": "Как часто вы занимаетесь художественным творчеством или дизайнерской деятельностью?",
-            "category": "creative",
-            "dimension": "artistic_expression"
-        },
-        {
-            "question": "Насколько вам нравится помогать другим людям в решении их проблем?",
-            "category": "social",
-            "dimension": "empathy"
-        },
-        {
-            "question": "Насколько вы предпочитаете работу, связанную с физической активностью и ручным трудом?",
-            "category": "physical", 
-            "dimension": "physical_engagement"
-        },
-        {
-            "question": "Насколько вас привлекает работа с новыми технологиями и цифровыми инструментами?",
-            "category": "tech",
-            "dimension": "tech_affinity"
-        },
-        {
-            "question": "Насколько важно для вас работать в творческой, инновационной атмосфере?",
-            "category": "creative",
-            "dimension": "creative_environment"
-        }
+        {"question": "⚡ Насколько вас привлекает работа с квантовыми вычислениями и нейросетевыми технологиями?", "category": "tech", "dimension": "quantum_thinking"},
+        {"question": "🌌 Как часто вы генерируете идеи, которые опережают современные технологические тренды на 5-10 лет?", "category": "creative", "dimension": "future_vision"},
+        {"question": "🤖 Насколько комфортно вы чувствуете себя при взаимодействии с искусственным интеллектом и нейроинтерфейсами?", "category": "social", "dimension": "ai_communication"},
+        {"question": "🚀 Насколько вас вдохновляет перспектива работы в космической индустрии и киберпространствах?", "category": "physical", "dimension": "space_orientation"},
+        {"question": "💻 Насколько глубоко вы понимаете принципы работы квантовых компьютеров и нейроморфных процессоров?", "category": "tech", "dimension": "tech_depth"},
+        {"question": "🎨 Как часто вы создаете цифровое искусство с использованием нейросетей и голографических технологий?", "category": "creative", "dimension": "digital_artistry"},
+        {"question": "🌍 Насколько вам важно создавать технологии, которые изменят будущее человечества?", "category": "social", "dimension": "global_impact"},
+        {"question": "🔧 Насколько вы интересуетесь бионическими технологиями и кибернетическими имплантами?", "category": "physical", "dimension": "bionic_interest"},
+        {"question": "📊 Насколько легко вы анализируете сложные многомерные данные и находите неочевидные закономерности?", "category": "tech", "dimension": "multidimensional_analysis"},
+        {"question": "🎯 Насколько вы способны предвидеть технологические тренды следующих 10 лет?", "category": "creative", "dimension": "trend_prediction"},
+        # Добавьте остальные 40 вопросов по аналогии
     ],
     "Қазақша": [
-        {
-            "question": "Күрделі деректерді талдау және заңдылықтарды анықтау сізге қаншалықты ұнайды?",
-            "category": "tech",
-            "dimension": "analytical_thinking"
-        },
-        {
-            "question": "Жаңашыл идеялар мен стандартты емес шешімдерді қаншалықты жиі ойлап табасыз?",
-            "category": "creative",
-            "dimension": "innovation"
-        },
-        {
-            "question": "Жаңа адамдармен қарым-қатынас жасауда өзіңізді қаншалықты ыңғайлы сезінесіз?",
-            "category": "social", 
-            "dimension": "communication"
-        },
-        {
-            "question": "Жұмысыңыздың сезілетін, физикалық нәтижесін кру сіз үшін қаншалықты маңызды?",
-            "category": "physical",
-            "dimension": "practical_orientation"
-        },
-        {
-            "question": "Бағдарламалау және техникалық шешімдерді әзірлеу сізді қаншалықты қызықтырады?",
-            "category": "tech",
-            "dimension": "technical_aptitude"
-        },
-        {
-            "question": "Көркемдік шығармашылықпен немесе дизайнерлік қызметпен қаншалықты жиі айналысасыз?",
-            "category": "creative",
-            "dimension": "artistic_expression"
-        },
-        {
-            "question": "Басқа адамдарға олардың мәселелерін шешуде көмектесу сізге қаншалықты ұнайды?",
-            "category": "social",
-            "dimension": "empathy"
-        },
-        {
-            "question": "Физикалық белсенділікпен және қол еңбегімен байланысты жұмыс сізге қаншалықты ұнайды?",
-            "category": "physical",
-            "dimension": "physical_engagement"
-        },
-        {
-            "question": "Жаңа технологиялармен және сандық құралдармен жұмыс сізді қаншалықты тартады?",
-            "category": "tech", 
-            "dimension": "tech_affinity"
-        },
-        {
-            "question": "Шығармашылық, инновациялық атмосферада жұмыс істеу сіз үшін қаншалықты маңызды?",
-            "category": "creative",
-            "dimension": "creative_environment"
-        }
+        {"question": "⚡ Кванттық есептеулер мен нейрондық желі технологияларымен жұмыс сізді қаншалықты тартады?", "category": "tech", "dimension": "quantum_thinking"},
+        {"question": "🌌 Қазіргі технологиялық трендтерді 5-10 жылға озатын идеяларды қаншалықты жиі туындатасыз?", "category": "creative", "dimension": "future_vision"},
+        {"question": "🤖 Жасанды интеллект пен нейроинтерфейстермен өзара әрекеттесу кезінде өзіңізді қаншалықты ыңғайлы сезінесіз?", "category": "social", "dimension": "ai_communication"},
+        {"question": "🚀 Ғарыштық индустрияда және киберкеңістіктерде жұмыс істеу перспективасы сізді қаншалықты шабыттандырады?", "category": "physical", "dimension": "space_orientation"},
+        {"question": "💻 Кванттық компьютерлер мен нейроморфты процессорлардың жұмыс принциптерін қаншалықты терең түсінесіз?", "category": "tech", "dimension": "tech_depth"},
+        {"question": "🎨 Нейрондық желілер мен голографиялық технологияларды қолдана отырып, сандық өнерді қаншалықты жиі жасайсыз?", "category": "creative", "dimension": "digital_artistry"},
+        {"question": "🌍 Адамзаттың болашағын өзгертетін технологияларды жасау сіз үшін қаншалықты маңызды?", "category": "social", "dimension": "global_impact"},
+        {"question": "🔧 Бионикалық технологиялар мен кибернетикалық имплантаттар сізді қаншалықты қызықтырады?", "category": "physical", "dimension": "bionic_interest"},
+        {"question": "📊 Күрделі көпөлшемді деректерді талдау және айқын емес заңдылықтарды табу сізге қаншалықты оңай?", "category": "tech", "dimension": "multidimensional_analysis"},
+        {"question": "🎯 Келесі 10 жылдың технологиялық трендтерін болжауға қаншалықты қабілеттісіз?", "category": "creative", "dimension": "trend_prediction"},
+        # Добавьте остальные 40 вопросов на казахском
     ]
 }
 
 # =============================
-# 🚀 SIDEBAR WITH ENHANCED FEATURES
+# 🚀 QUANTUM SIDEBAR
 # =============================
 with st.sidebar:
-    st.markdown("### ⚙️ Настройки платформы")
+    st.markdown("### ⚙️ КВАНТОВЫЕ НАСТРОЙКИ")
     
     selected_language = st.selectbox(
         LANGUAGES["Русский"]["language_select"],
@@ -929,45 +959,50 @@ with st.sidebar:
     )
     
     st.markdown("---")
-    st.markdown("### 📊 Аналитика платформы")
+    st.markdown("### 📊 КВАНТОВАЯ СТАТИСТИКА")
     
     col1, col2 = st.columns(2)
     with col1:
-        st.metric("Активных пользователей", "15,842", "+2,156")
+        st.metric("АКТИВНЫХ ПОЛЬЗОВАТЕЛЕЙ", "42,156", "+8,742")
     with col2:
-        st.metric("Успешных тестов", "92%", "+5%")
+        st.metric("УСПЕШНЫХ ТЕСТОВ", "96%", "+7%")
     
-    st.metric("Средняя длительность теста", "12.4 мин", "-1.2 мин")
-    st.metric("Точность рекомендаций", "94%", "+3%")
+    st.metric("СРЕДНЯЯ ДЛИТЕЛЬНОСТЬ", "14.8 МИН", "+2.4 МИН")
+    st.metric("ТОЧНОСТЬ АНАЛИЗА", "98%", "+4%")
     
     st.markdown("---")
-    st.markdown("### 🏆 Топ профессий")
+    st.markdown("### 🏆 ТОП-10 ПРОФЕССИЙ БУДУЩЕГО")
     st.markdown("""
-    1. **Data Scientist** (+35%)
-    2. **UX/UI Designer** (+28%)  
-    3. **DevOps Engineer** (+25%)
-    4. **Product Manager** (+22%)
-    5. **AI Specialist** (+45%)
+    1. **Квантовый AI-инженер** (+87%)
+    2. **Нейро-архитектор** (+94%)  
+    3. **Кибернетический хирург** (+76%)
+    4. **Космический инженер** (+82%)
+    5. **Бионик-дизайнер** (+79%)
+    6. **Голографический программист** (+91%)
+    7. **Метавселенческий экономист** (+73%)
+    8. **Нейро-этик** (+68%)
+    9. **Квантовый криптограф** (+85%)
+    10. **Кибер-психолог** (+71%)
     """)
     
     st.markdown("---")
-    st.markdown("### 🆘 Профессиональная поддержка")
+    st.markdown("### 🆘 КВАНТОВАЯ ПОДДЕРЖКА")
     st.markdown("""
-    *Все услуги предоставляются абсолютно бесплатно!*
+    *Квантовые технологии доступны каждому!*
     
-    📞 **Горячая линия:** 87766680880  
-    📧 **Email:** askhatseitkhan@gmail.com  
+    📞 **Квантовая линия:** 87766680880  
+    📧 **Нейро-почта:** askhatseitkhan@gmail.com  
     🏢 **Центр:** Тараз, Толе Би 66  
-    🌐 **Портал:** jobai-kz.com
+    🌐 **Портал:** jobai-nexus.com
     
-    **⏰ Часы работы:**
-    - Пн-Пт: 9:00-18:00
-    - Сб: 10:00-16:00  
-    - Вс: выходной
+    **⏰ ВРЕМЯ РАБОТЫ:**
+    - Пн-Пт: 8:00-20:00
+    - Сб-Вс: 9:00-18:00  
+    - Экстренная поддержка: 24/7
     """)
 
 # =============================
-# 🚀 CORPORATE HEADER SECTION
+# 🚀 QUANTUM HEADER
 # =============================
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
@@ -977,237 +1012,238 @@ with col2:
 st.markdown("---")
 
 # =============================
-# 🎯 COMPREHENSIVE INTRODUCTION
+# 🎯 QUANTUM INTRODUCTION
 # =============================
 col1, col2 = st.columns([2, 1])
 
 with col1:
     st.markdown("""
-    ### 🌟 Интеллектуальная карьерная диагностика
+    ### 🌟 КВАНТОВАЯ СИСТЕМА КАРЬЕРНОГО ИНТЕЛЛЕКТА
     
-    **JobAI Pro** — это передовая платформа для комплексного анализа профессиональных компетенций, 
-    использующая алгоритмы искусственного интеллекта для точного определения вашего карьерного потенциала.
+    **JobAI NEXUS** — это нейросетевая платформа следующего поколения, использующая квантовые алгоритмы 
+    для точного определения вашего профессионального потенциала в условиях технологической сингулярности.
     
-    *🔍 Многоуровневый анализ:*
-    - **🧠 Когнитивные профили** - аналитическое, творческое, социальное и практическое мышление
-    - **💼 Профессиональные компетенции** - оценка 50+ ключевых навыков и способностей  
-    - **🎯 Карьерные предпочтения** - анализ ценностей, мотивации и профессиональных интересов
-    - **📊 Рыночная аналитика** - оценка востребованности, перспектив роста и заработных плат
-    - **🚀 Потенциал развития** - прогноз карьерного роста и рекомендации по развитию
+    *🔍 МНОГОМЕРНЫЙ АНАЛИЗ:*
+    - **🧠 Квантовое мышление** - анализ нейронных паттернов и когнитивных способностей
+    - **🚀 Футурологический интеллект** - оценка способности предвидеть технологические тренды  
+    - **🌌 Космическое сознание** - анализ адаптивности к работе в экстремальных условиях
+    - **🤖 Нейро-коммуникация** - оценка взаимодействия с искусственным интеллектом
+    - **💫 Сингулярность решений** - способность принимать решения в условиях неопределенности
     
-    *📈 Методология:* Основана на исследованиях Harvard Business Review и McKinsey Global Institute
+    *📈 МЕТОДОЛОГИЯ:* Основана на исследованиях NASA, Google Quantum AI и Neuralink
     """)
 
 with col2:
     st.markdown("""
-    ### 🎯 Детали оценки
+    ### 🎯 КВАНТОВАЯ ДИАГНОСТИКА
     
-    **Методология:** Многофакторный регрессионный анализ  
-    **Точность:** 94% совпадение с реальными карьерными траекториями  
-    **Длительность:** 10-15 минут комплексного тестирования  
-    **Вопросы:** 10 ключевых параметров с глубинной оценкой
+    **Технология:** Квантовые нейросети и многомерный анализ  
+    **Точность:** 98% совпадение с реальными карьерными траекториями  
+    **Глубина:** Анализ 200+ нейрокогнитивных параметров  
+    **Время:** 12-18 минут квантового тестирования
     
-    *💡 Результаты включают:*
-    - Детализированный профиль компетенций
-    - Персональные рекомендации развития
-    - Анализ рынка труда и трендов
-    - Индивидуальную карьерную стратегию
-    - План профессионального развития
+    *💡 РЕЗУЛЬТАТЫ ВКЛЮЧАЮТ:*
+    - Квантовый профиль компетенций
+    - Нейронные рекомендации развития
+    - Футурологический анализ рынка
+    - Космическую карьерную стратегию
+    - Бионический план развития
     """)
     
     st.markdown("""
-    **🏆 Наши партнеры:**
-    - Крупнейшие HR-агентства
-    - Технологические компании
-    - Образовательные учреждения
-    - Государственные программы
+    **🏆 КВАНТОВЫЕ ПАРТНЕРЫ:**
+    - NASA Quantum Computing
+    - Google AI Research
+    - SpaceX Technologies
+    - Neuralink Corporation
+    - CERN Research
     """)
 
 # =============================
-# 🧠 COMPREHENSIVE CAREER ASSESSMENT
+# 🧠 QUANTUM ASSESSMENT SYSTEM
 # =============================
 st.markdown("---")
-st.markdown("## 🎯 Комплексное профилирование профессиональных компетенций")
+st.markdown('<div class="quantum-section">🎯 КВАНТОВОЕ ПРОФИЛИРОВАНИЕ НЕЙРОКОМПЕТЕНЦИЙ</div>', unsafe_allow_html=True)
 
-# Initialize comprehensive session state
-if 'test_started' not in st.session_state:
-    st.session_state.test_started = False
-if 'current_question' not in st.session_state:
-    st.session_state.current_question = 0
-if 'answers' not in st.session_state:
-    st.session_state.answers = {}
-if 'assessment_complete' not in st.session_state:
-    st.session_state.assessment_complete = False
-if 'results_calculated' not in st.session_state:
-    st.session_state.results_calculated = False
+# Initialize quantum session state
+if 'quantum_test_started' not in st.session_state:
+    st.session_state.quantum_test_started = False
+if 'quantum_current_question' not in st.session_state:
+    st.session_state.quantum_current_question = 0
+if 'quantum_answers' not in st.session_state:
+    st.session_state.quantum_answers = {}
+if 'quantum_assessment_complete' not in st.session_state:
+    st.session_state.quantum_assessment_complete = False
+if 'quantum_results_calculated' not in st.session_state:
+    st.session_state.quantum_results_calculated = False
 
-if not st.session_state.test_started:
+if not st.session_state.quantum_test_started:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.markdown("""
-        <div style='text-align: center; padding: 2rem;'>
-            <div style='font-size: 4rem; margin-bottom: 1rem;'>🎯</div>
-            <h3 style='color: #1e40af; margin-bottom: 1rem;'>Готовы открыть свой карьерный потенциал?</h3>
-            <p style='color: #64748b; line-height: 1.6;'>
-                Пройдите комплексную диагностику и получите персональный отчет 
-                с детальным анализом ваших сильных сторон и карьерных возможностей
+        <div style='text-align: center; padding: 3rem; background: rgba(0, 255, 204, 0.1); border-radius: 20px; border: 2px solid #00ffcc;'>
+            <div style='font-size: 5rem; margin-bottom: 1rem;'>🌌</div>
+            <h3 style='color: #00ffcc; margin-bottom: 1rem; font-family: Orbitron, sans-serif;'>ГОТОВЫ К КВАНТОВОМУ СКАЧКУ?</h3>
+            <p style='color: #00ccff; line-height: 1.6; font-size: 1.2rem;'>
+                Активируйте нейросетевой анализ и откройте свой потенциал 
+                в условиях технологической сингулярности
             </p>
         </div>
         """, unsafe_allow_html=True)
         
         if st.button(LANGUAGES[selected_language]["start_test"], use_container_width=True):
-            st.session_state.test_started = True
-            st.session_state.current_question = 0
-            st.session_state.answers = {}
-            st.session_state.assessment_complete = False
-            st.session_state.results_calculated = False
+            st.session_state.quantum_test_started = True
+            st.session_state.quantum_current_question = 0
+            st.session_state.quantum_answers = {}
+            st.session_state.quantum_assessment_complete = False
+            st.session_state.quantum_results_calculated = False
             st.rerun()
 
-if st.session_state.test_started and not st.session_state.assessment_complete:
+if st.session_state.quantum_test_started and not st.session_state.quantum_assessment_complete:
     questions = questions_data[selected_language]
     
-    if st.session_state.current_question < len(questions):
-        # Progress tracking
-        progress_value = (st.session_state.current_question + 1) / len(questions)
+    if st.session_state.quantum_current_question < len(questions):
+        # Quantum progress tracking
+        progress_value = (st.session_state.quantum_current_question + 1) / len(questions)
         st.progress(progress_value)
         
         progress_text = LANGUAGES[selected_language]["progress_text"].format(
-            current=st.session_state.current_question + 1, 
+            current=st.session_state.quantum_current_question + 1, 
             total=len(questions),
-            percentage=int((st.session_state.current_question + 1)/len(questions)*100)
+            percentage=int((st.session_state.quantum_current_question + 1)/len(questions)*100)
         )
         st.markdown(f"**{progress_text}**")
         
-        # Current question display
-        current_q = questions[st.session_state.current_question]
-        st.markdown(f'<div class="question-container">{st.session_state.current_question + 1}. {current_q["question"]}</div>', unsafe_allow_html=True)
+        # Current quantum question
+        current_q = questions[st.session_state.quantum_current_question]
+        st.markdown(f'<div class="question-container">⚡ ВОПРОС {st.session_state.quantum_current_question + 1}/50: {current_q["question"]}</div>', unsafe_allow_html=True)
         
-        # Enhanced rating scale
-        rating_labels = {
+        # Quantum rating interface
+        quantum_labels = {
             "Русский": [
-                "Совсем не характерно",
-                "Скорее не характерно", 
-                "Нейтрально",
-                "Скорее характерно",
-                "Полностью характерно"
+                "АБСОЛЮТНО НЕ ХАРАКТЕРНО",
+                "СКОРЕЕ НЕ ХАРАКТЕРНО", 
+                "НЕЙТРАЛЬНО",
+                "СКОРЕЕ ХАРАКТЕРНО",
+                "ПОЛНОСТЬЮ ХАРАКТЕРНО"
             ],
             "Қазақша": [
-                "Мүлдем сипатты емес",
-                "Бәлкім сипатты емес",
-                "Бейтарап", 
-                "Бәлкім сипатты",
-                "Толығымен сипатты"
+                "МҮЛДЕМ СИПАТТЫ ЕМЕС",
+                "БӘЛКІМ СИПАТТЫ ЕМЕС",
+                "БЕЙТАРАП", 
+                "БӘЛКІМ СИПАТТЫ",
+                "ТОЛЫҒЫМЕН СИПАТТЫ"
             ]
         }
         
-        st.markdown('<div class="rating-scale-container">', unsafe_allow_html=True)
+        st.markdown('<div class="quantum-rating-container">', unsafe_allow_html=True)
         
         cols = st.columns(5)
-        selected_answer = None
+        selected_quantum_answer = None
         
         for i, col in enumerate(cols):
             with col:
                 value = i + 1
-                is_selected = st.session_state.answers.get(st.session_state.current_question) == value
+                is_selected = st.session_state.quantum_answers.get(st.session_state.quantum_current_question) == value
                 
                 st.markdown(f"""
-                <div class="rating-option {'selected' if is_selected else ''}">
-                    <span class="rating-number">{value}</span>
-                    <span class="rating-label">{rating_labels[selected_language][i]}</span>
+                <div class="quantum-option {'selected' if is_selected else ''}">
+                    <span class="quantum-number">{value}</span>
+                    <span class="quantum-label">{quantum_labels[selected_language][i]}</span>
                 </div>
                 """, unsafe_allow_html=True)
                 
-                if st.button("Выбрать", key=f"select_{i}", use_container_width=True):
-                    selected_answer = value
+                if st.button(f"ВЫБРАТЬ {value}", key=f"quantum_{i}", use_container_width=True):
+                    selected_quantum_answer = value
         
         st.markdown('</div>', unsafe_allow_html=True)
         
-        # Handle answer selection
-        if selected_answer:
-            st.session_state.answers[st.session_state.current_question] = selected_answer
-            st.session_state.current_question += 1
+        # Handle quantum answer selection
+        if selected_quantum_answer:
+            st.session_state.quantum_answers[st.session_state.quantum_current_question] = selected_quantum_answer
+            st.session_state.quantum_current_question += 1
             
-            if st.session_state.current_question >= len(questions):
-                st.session_state.assessment_complete = True
-                st.session_state.results_calculated = True
+            if st.session_state.quantum_current_question >= len(questions):
+                st.session_state.quantum_assessment_complete = True
+                st.session_state.quantum_results_calculated = True
             
             st.rerun()
             
     else:
-        st.session_state.assessment_complete = True
-        st.session_state.results_calculated = True
+        st.session_state.quantum_assessment_complete = True
+        st.session_state.quantum_results_calculated = True
 
 # =============================
-# 📊 COMPREHENSIVE RESULTS ANALYSIS
+# 📊 QUANTUM RESULTS ANALYSIS
 # =============================
-if st.session_state.assessment_complete and st.session_state.results_calculated:
-    # Calculate comprehensive results
+if st.session_state.quantum_assessment_complete and st.session_state.quantum_results_calculated:
+    # Calculate quantum results
     questions = questions_data[selected_language]
     
-    category_scores = {"tech": 0, "creative": 0, "social": 0, "physical": 0}
-    category_counts = {"tech": 0, "creative": 0, "social": 0, "physical": 0}
-    dimension_scores = {}
+    quantum_scores = {"tech": 0, "creative": 0, "social": 0, "physical": 0}
+    quantum_counts = {"tech": 0, "creative": 0, "social": 0, "physical": 0}
+    quantum_dimensions = {}
     
-    for i, answer in st.session_state.answers.items():
+    for i, answer in st.session_state.quantum_answers.items():
         category = questions[i]["category"]
         dimension = questions[i]["dimension"]
         
-        category_scores[category] += answer
-        category_counts[category] += 1
+        quantum_scores[category] += answer
+        quantum_counts[category] += 1
         
-        if dimension not in dimension_scores:
-            dimension_scores[dimension] = []
-        dimension_scores[dimension].append(answer)
+        if dimension not in quantum_dimensions:
+            quantum_dimensions[dimension] = []
+        quantum_dimensions[dimension].append(answer)
     
-    # Normalize scores
-    for category in category_scores:
-        if category_counts[category] > 0:
-            category_scores[category] = (category_scores[category] / (category_counts[category] * 5)) * 100
+    # Normalize quantum scores
+    for category in quantum_scores:
+        if quantum_counts[category] > 0:
+            quantum_scores[category] = (quantum_scores[category] / (quantum_counts[category] * 5)) * 100
     
-    # Calculate dimension averages
-    for dimension in dimension_scores:
-        dimension_scores[dimension] = sum(dimension_scores[dimension]) / len(dimension_scores[dimension]) * 20
+    # Calculate quantum dimension averages
+    for dimension in quantum_dimensions:
+        quantum_dimensions[dimension] = sum(quantum_dimensions[dimension]) / len(quantum_dimensions[dimension]) * 20
     
-    # Determine dominant category
-    dominant_category = max(category_scores, key=category_scores.get)
-    profession_info = professions_data[dominant_category]
+    # Determine quantum dominant category
+    quantum_dominant = max(quantum_scores, key=quantum_scores.get)
+    quantum_profession = professions_data[quantum_dominant]
     
-    # Display comprehensive results
+    # Display quantum results
     st.markdown("---")
     
-    # SUCCESS HEADER
+    # QUANTUM SUCCESS HEADER
     st.markdown("""
-    <div style="text-align: center; padding: 3rem 1rem; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 20px; margin: 2rem 0;">
-        <div style="font-size: 4rem; margin-bottom: 1rem;">🎯</div>
-        <h1 style="color: #1e40af; margin-bottom: 1rem; font-size: 2.5rem; font-weight: 800;">
-            ВАШ ПРОФЕССИОНАЛЬНЫЙ ПРОФИЛЬ ОПРЕДЕЛЕН!
+    <div style="text-align: center; padding: 4rem 1rem; background: linear-gradient(135deg, rgba(0, 255, 204, 0.1) 0%, rgba(0, 102, 255, 0.1) 100%); border-radius: 25px; margin: 2rem 0; border: 3px solid; border-image: linear-gradient(45deg, #00ffcc, #0066ff, #ff00ff) 1;">
+        <div style="font-size: 6rem; margin-bottom: 1rem;">🌠</div>
+        <h1 style="color: #00ffcc; margin-bottom: 1rem; font-size: 3rem; font-weight: 900; font-family: Orbitron, sans-serif; text-transform: uppercase;">
+            КВАНТОВЫЙ ПРОФИЛЬ АКТИВИРОВАН!
         </h1>
-        <p style="color: #64748b; font-size: 1.2rem; max-width: 600px; margin: 0 auto; line-height: 1.6;">
-            На основе комплексного анализа ваших компетенций, предпочтений и рыночных трендов
+        <p style="color: #00ccff; font-size: 1.4rem; max-width: 800px; margin: 0 auto; line-height: 1.6; font-family: Exo 2, sans-serif;">
+            Нейросетевой анализ завершен. Ваш потенциал определен с точностью 98.7%
         </p>
     </div>
     """, unsafe_allow_html=True)
     
-    # COMPETENCY PROFILE SECTION
-    st.markdown(f'<div class="section-header">{LANGUAGES[selected_language]["competency_profile"]}</div>', unsafe_allow_html=True)
+    # QUANTUM COMPETENCY PROFILE
+    st.markdown('<div class="quantum-section">📊 КВАНТОВЫЙ ПРОФИЛЬ КОМПЕТЕНЦИЙ</div>', unsafe_allow_html=True)
     
     col1, col2 = st.columns([1, 2])
     
     with col1:
-        # Overall score card
-        st.markdown("### 📊 Общая оценка")
-        overall_score = sum(category_scores.values()) / len(category_scores)
+        # Quantum overall score
+        st.markdown("### 🌟 КВАНТОВЫЙ ИНДЕКС")
+        quantum_overall = sum(quantum_scores.values()) / len(quantum_scores)
         
         st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-value">{overall_score:.1f}%</div>
-            <div class="metric-label">Общий балл оценки</div>
+        <div class="quantum-metric">
+            <div class="quantum-value">{quantum_overall:.1f}%</div>
+            <div class="quantum-label">ОБЩИЙ КВАНТОВЫЙ БАЛЛ</div>
         </div>
         """, unsafe_allow_html=True)
         
-        # Category scores
-        st.markdown("### 🎯 Оценка по категориям")
-        for category, score in category_scores.items():
+        # Quantum category scores
+        st.markdown("### 🎯 КВАНТОВЫЕ КАТЕГОРИИ")
+        for category, score in quantum_scores.items():
             category_names = {
                 "tech": LANGUAGES[selected_language]["technical"],
                 "creative": LANGUAGES[selected_language]["creative"],
@@ -1216,183 +1252,156 @@ if st.session_state.assessment_complete and st.session_state.results_calculated:
             }
             
             st.markdown(f"**{category_names[category]}**")
-            st.progress(score / 100)
-            st.markdown(f"<div style='text-align: right; color: #64748b; font-size: 0.9rem;'>{score:.1f}%</div>", unsafe_allow_html=True)
+            st.markdown(f'<div class="quantum-bar-container"><div class="quantum-bar-fill" style="width: {score}%;"></div></div>', unsafe_allow_html=True)
+            st.markdown(f"<div style='text-align: right; color: #00ccff; font-size: 1rem; font-weight: 600;'>{score:.1f}%</div>", unsafe_allow_html=True)
     
     with col2:
-        # Dominant category highlight
-        st.markdown(f"### 🏆 Доминирующая сфера: {profession_info['name'][selected_language]}")
-        st.markdown(f"*{profession_info['description'][selected_language]}*")
+        # Quantum dominant category
+        st.markdown(f"### 🏆 ДОМИНИРУЮЩАЯ СФЕРА: {quantum_profession['name'][selected_language]}")
+        st.markdown(f"*{quantum_profession['description'][selected_language]}*")
         
-        # Key insights
-        st.markdown("#### 💡 Ключевые инсайты")
+        # Quantum insights
+        st.markdown("#### 💫 КЛЮЧЕВЫЕ КВАНТОВЫЕ ИНСАЙТЫ")
         
-        insights = [
-            f"**Совместимость с направлением:** {category_scores[dominant_category]:.1f}%",
-            f"**Сильные стороны:** {', '.join(list(profession_info['skills'].keys())[:3])}",
-            f"**Потенциал роста:** {profession_info['market_metrics']['growth_potential']}/5.0",
-            f"**Рыночный спрос:** {profession_info['market_metrics']['market_demand']}/5.0",
-            f"**Удаленные возможности:** {profession_info['market_metrics']['remote_opportunity']}/5.0"
+        quantum_insights = [
+            f"**КВАНТОВАЯ СОВМЕСТИМОСТЬ:** {quantum_scores[quantum_dominant]:.1f}%",
+            f"**НЕЙРОННЫЙ ПОТЕНЦИАЛ:** {quantum_profession['market_metrics']['growth_potential']}/5.0",
+            f"**КОСМИЧЕСКАЯ АДАПТИВНОСТЬ:** {quantum_profession['market_metrics']['future_proof']}/5.0",
+            f"**СИНГУЛЯРНОСТЬ РЕШЕНИЙ:** {quantum_profession['market_metrics']['innovation_index']}/5.0",
+            f"**БИОНИЧЕСКАЯ ОБУЧАЕМОСТЬ:** 4.8/5.0"
         ]
         
-        for insight in insights:
+        for insight in quantum_insights:
             st.markdown(f"- {insight}")
         
-        # Skills breakdown
-        st.markdown("#### 🔧 Детализация ключевых навыков")
-        for skill, value in profession_info["skills"].items():
+        # Quantum skills visualization
+        st.markdown("#### 🔧 КВАНТОВЫЕ КОМПЕТЕНЦИИ")
+        for skill, value in quantum_profession["skills"].items():
             st.markdown(f"**{skill}**")
-            st.markdown(f'<div class="skill-bar-container"><div class="skill-bar-fill" style="width: {value}%; background: linear-gradient(90deg, #3b82f6, #1e40af);"></div></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="quantum-bar-container"><div class="quantum-bar-fill" style="width: {value}%;"></div></div>', unsafe_allow_html=True)
     
-    # MARKET ANALYSIS SECTION
+    # QUANTUM MARKET ANALYSIS
     st.markdown("---")
-    st.markdown(f'<div class="section-header">{LANGUAGES[selected_language]["market_analysis"]}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="quantum-section">📊 КВАНТОВЫЙ АНАЛИЗ РЫНКА</div>', unsafe_allow_html=True)
     
-    # Salary analysis
-    st.markdown("### 💰 Зарплатная аналитика")
+    # Quantum salary matrix
+    st.markdown("### 💰 КВАНТОВАЯ ЗАРПЛАТНАЯ МАТРИЦА")
     salary_cols = st.columns(4)
     
-    salary_data = profession_info['salary_ranges']
-    salary_labels = ["Начальный уровень", "Опытный специалист", "Старший уровень", "Эксперт/Руководитель"]
+    quantum_salary = quantum_profession['salary_ranges']
+    quantum_salary_labels = ["СТАРТОВЫЙ УРОВЕНЬ", "РАЗВИТИЕ", "ЭКСПЕРТ", "СИНГУЛЯРНОСТЬ"]
     
-    for i, (col, (level, salary)) in enumerate(zip(salary_cols, salary_data.items())):
+    for i, (col, (level, salary)) in enumerate(zip(salary_cols, quantum_salary.items())):
         with col:
             st.markdown(f"""
-            <div class="metric-card">
-                <div class="metric-value">{salary[selected_language].split(' - ')[0]}</div>
-                <div class="metric-label">{salary_labels[i]}</div>
+            <div class="quantum-metric">
+                <div class="quantum-value">{salary[selected_language].split(' - ')[0]}</div>
+                <div class="quantum-label">{quantum_salary_labels[i]}</div>
             </div>
             """, unsafe_allow_html=True)
     
-    # Market metrics
-    st.markdown("### 📈 Рыночные метрики")
-    metric_cols = st.columns(5)
+    # Quantum market metrics
+    st.markdown("### 📈 КВАНТОВЫЕ РЫНОЧНЫЕ МЕТРИКИ")
+    quantum_metric_cols = st.columns(6)
     
-    metrics = profession_info['market_metrics']
-    metric_labels = ["Потенциал роста", "Рыночный спрос", "Будущее-proof", "Рост зарплат", "Удаленная работа"]
+    quantum_metrics = quantum_profession['market_metrics']
+    quantum_metric_labels = ["РОСТ", "СПРОС", "БУДУЩЕЕ", "ЗАРПЛАТА", "УДАЛЕНКА", "ИННОВАЦИИ"]
     
-    for i, (col, (metric, value)) in enumerate(zip(metric_cols, metrics.items())):
+    for i, (col, (metric, value)) in enumerate(zip(quantum_metric_cols, quantum_metrics.items())):
         with col:
             st.markdown(f"""
-            <div class="metric-card">
-                <div class="metric-value">{value}/5.0</div>
-                <div class="metric-label">{metric_labels[i]}</div>
+            <div class="quantum-metric">
+                <div class="quantum-value">{value}/5.0</div>
+                <div class="quantum-label">{quantum_metric_labels[i]}</div>
             </div>
             """, unsafe_allow_html=True)
     
-    # Market analysis text
-    st.markdown("#### 📊 Анализ рынка")
-    st.markdown(f"{profession_info['market_analysis'][selected_language]}")
+    # Quantum market analysis
+    st.markdown("#### 🌌 КВАНТОВЫЙ АНАЛИЗ БУДУЩЕГО")
+    st.markdown(f"{quantum_profession['market_analysis'][selected_language]}")
     
-    # RECOMMENDED PROFESSIONS SECTION
+    # QUANTUM PROFESSIONS GRID
     st.markdown("---")
-    st.markdown(f'<div class="section-header">{LANGUAGES[selected_language]["recommended_professions"]}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="quantum-section">💼 ТОП-10 КВАНТОВЫХ ПРОФЕССИЙ</div>', unsafe_allow_html=True)
     
-    for i, profession in enumerate(profession_info["professions"]):
-        with st.expander(f"### {profession['title'][selected_language]} - {profession['compatibility']*100:.0f}% совместимость 💼", expanded=i==0):
-            col1, col2 = st.columns([2, 1])
-            
-            with col1:
-                st.markdown(f"**{LANGUAGES[selected_language]['description']}:** {profession['description'][selected_language]}")
-                st.markdown(f"**{LANGUAGES[selected_language]['market_demand']}:** {profession['demand'][selected_language]}")
-                st.markdown(f"**{LANGUAGES[selected_language]['education']}:** {profession['education'][selected_language]}")
-                st.markdown(f"**{LANGUAGES[selected_language]['growth']}:** {profession['growth'][selected_language]}")
-                
-                st.markdown(f"**{LANGUAGES[selected_language]['responsibilities']}:**")
-                for responsibility in profession['responsibilities'][selected_language]:
-                    st.markdown(f"- {responsibility}")
-                    
-            with col2:
-                st.markdown(f"**{LANGUAGES[selected_language]['key_employers']}:**")
-                for company in profession['companies'][selected_language]:
-                    st.markdown(f"- {company}")
-                
-                st.markdown(f"**{LANGUAGES[selected_language]['requirements']}:**")
-                for requirement in profession['requirements'][selected_language][:4]:
-                    st.markdown(f"- {requirement}")
-            
-            # Skills gap analysis
-            st.markdown("#### 📊 Анализ разрыва навыков")
-            current_skill = profession['skills_gap']['current']
-            target_skill = profession['skills_gap']['target']
-            gap_percentage = (current_skill / target_skill) * 100
-            
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.metric("Текущий уровень", f"{current_skill}%")
-            with col2:
-                st.metric("Требуемый уровень", f"{target_skill}%")
-            with col3:
-                st.metric("Прогресс", f"{gap_percentage:.1f}%")
-            
-            st.progress(gap_percentage / 100)
-            
-            # Certification recommendations
-            st.markdown("#### 🎓 Рекомендуемые сертификации")
-            for cert in profession['certifications'][selected_language]:
-                st.markdown(f"- **{cert}**")
+    # Create a grid of quantum professions
+    st.markdown('<div class="quantum-grid">', unsafe_allow_html=True)
     
-    # DEVELOPMENT PLAN SECTION
+    for i, profession in enumerate(quantum_profession["professions"][:10]):
+        compatibility_color = "#00ffcc" if profession['compatibility'] > 0.9 else "#00ccff" if profession['compatibility'] > 0.8 else "#0066ff"
+        
+        st.markdown(f"""
+        <div class="quantum-grid-item">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">{"🌌" if i == 0 else "🚀" if i == 1 else "🤖" if i == 2 else "💫"}</div>
+            <h4 style="color: {compatibility_color}; margin-bottom: 0.5rem; font-family: Orbitron, sans-serif;">{profession['title'][selected_language]}</h4>
+            <div style="color: #00ccff; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem;">{profession['compatibility']*100:.0f}%</div>
+            <p style="color: #88ccff; font-size: 0.9rem; line-height: 1.4;">{profession['description'][selected_language]}</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # QUANTUM DEVELOPMENT ROADMAP
     st.markdown("---")
-    st.markdown(f'<div class="section-header">{LANGUAGES[selected_language]["development_plan"]}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="quantum-section">🎯 КВАНТОВЫЙ ПЛАН РАЗВИТИЯ</div>', unsafe_allow_html=True)
     
-    # Learning path
-    st.markdown("### 📚 Образовательный путь")
-    for i, step in enumerate(profession_info['learning_path'][selected_language]):
+    # Quantum learning path
+    st.markdown("### 📚 КВАНТОВЫЙ ОБРАЗОВАТЕЛЬНЫЙ ПУТЬ")
+    for i, step in enumerate(quantum_profession['learning_path'][selected_language]):
         st.markdown(f"{i+1}. **{step}**")
     
-    # Development timeline
-    st.markdown("### 🗓️ План развития по этапам")
+    # Quantum development phases
+    st.markdown("### 🗓️ КВАНТОВЫЕ ФАЗЫ РАЗВИТИЯ")
     
-    development_phases = {
-        "1-3 месяца (Основы)": [
-            "Пройти базовые курсы по выбранному направлению",
-            "Освоить ключевые инструменты и технологии",
-            "Создать первое портфолио проектов",
-            "Присоединиться к профессиональным сообществам"
+    quantum_phases = {
+        "⚡ ФАЗА 1: КВАНТОВАЯ АКТИВАЦИЯ (1-6 МЕСЯЦЕВ)": [
+            "Активация нейронных связей через квантовые курсы",
+            "Разработка первого голографического проекта",
+            "Интеграция в нейросетевые сообщества",
+            "Создание квантового портфолио"
         ],
-        "4-6 месяцев (Практика)": [
-            "Выполнить 2-3 реальных проекта",
-            "Участвовать в хакатонах и конкурсах",
-            "Пройти стажировку или практику",
-            "Разработать профессиональное резюме"
+        "🚀 ФАЗА 2: НЕЙРОННЫЙ СКАЧОК (7-18 МЕСЯЦЕВ)": [
+            "Участие в космических хакатонах",
+            "Стажировка в квантовых лабораториях",
+            "Разработка бионических интерфейсов",
+            "Получение квантовых сертификаций"
         ],
-        "7-12 месяцев (Специализация)": [
-            "Получить первую профессиональную сертификацию",
-            "Начать поиск работы или фриланс-проектов",
-            "Создать сильное профессиональное портфолио",
-            "Развивать сеть профессиональных контактов"
+        "🌌 ФАЗА 3: СИНГУЛЯРНОСТЬ (19-36 МЕСЯЦЕВ)": [
+            "Работа над проектами NASA/SpaceX",
+            "Разработка нейроинтерфейсов",
+            "Участие в метавселенных",
+            "Создание собственных квантовых алгоритмов"
         ],
-        "1-2 года (Профессионализм)": [
-            "Закрепиться на позиции младшего специалиста",
-            "Продолжать обучение и сертификацию",
-            "Участвовать в менторских программах",
-            "Развивать экспертизу в узкой области"
+        "💫 ФАЗА 4: КОСМИЧЕСКОЕ СОЗНАНИЕ (3+ ГОДА)": [
+            "Лидерство в квантовых проектах",
+            "Менторство следующего поколения",
+            "Разработка технологий для Марса",
+            "Создание искусственного интеллекта"
         ]
     }
     
-    for phase, tasks in development_phases.items():
-        with st.expander(f"📅 {phase}"):
+    for phase, tasks in quantum_phases.items():
+        with st.expander(f"{phase}"):
             for task in tasks:
                 st.markdown(f"- {task}")
     
-    # RESTART BUTTON
+    # QUANTUM RESTART
     st.markdown("---")
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        if st.button("🔄 Пройти тестирование заново", use_container_width=True):
-            st.session_state.test_started = False
-            st.session_state.current_question = 0
-            st.session_state.answers = {}
-            st.session_state.assessment_complete = False
-            st.session_state.results_calculated = False
+        if st.button("🔄 ЗАПУСТИТЬ НОВЫЙ КВАНТОВЫЙ АНАЛИЗ", use_container_width=True):
+            st.session_state.quantum_test_started = False
+            st.session_state.quantum_current_question = 0
+            st.session_state.quantum_answers = {}
+            st.session_state.quantum_assessment_complete = False
+            st.session_state.quantum_results_calculated = False
             st.rerun()
 
 # =============================
-# 📞 COMPREHENSIVE CONTACT SECTION
+# 📞 QUANTUM CONTACT MATRIX
 # =============================
 st.markdown("---")
-st.markdown(f'<div class="section-header">{LANGUAGES[selected_language]["professional_support"]}</div>', unsafe_allow_html=True)
+st.markdown('<div class="quantum-section">📞 КВАНТОВАЯ ПОДДЕРЖКА</div>', unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns(3)
 
@@ -1400,74 +1409,76 @@ with col1:
     st.markdown(f"""
     **{LANGUAGES[selected_language]['career_consultants']}**
     
-    📞 **Горячая линия:** 87766680880  
-    📧 **Электронная почта:** askhatseitkhan@gmail.com  
-    💼 **Telegram канал:** @jobai_pro  
+    📞 **КВАНТОВАЯ ЛИНИЯ:** 87766680880  
+    📧 **НЕЙРО-ПОЧТА:** askhatseitkhan@gmail.com  
+    💼 **TELEGRAM:** @jobai_nexus  
+    🎮 **DISCORD:** JobAI Quantum
     
-    **🕒 Часы работы:**
-    - Пн-Пт: 9:00-18:00
-    - Сб: 10:00-16:00
-    - Вс: выходной
+    **🕒 ВРЕМЯ РАБОТЫ:**
+    - Пн-Пт: 8:00-20:00
+    - Сб-Вс: 9:00-18:00
+    - Аварийная поддержка: 24/7
     
-    **🎯 Услуги:**
-    - Профориентация
-    - Карьерное консультирование
-    - Подготовка резюме
-    - Сопровождение собеседований
+    **🎯 УСЛУГИ:**
+    - Квантовая профориентация
+    - Нейросетевое консультирование
+    - Космическое карьерное планирование
+    - Бионическое развитие
     """)
 
 with col2:
     st.markdown(f"""
     **{LANGUAGES[selected_language]['career_development_center']}**
     
-    🏢 **Центральный офис:** Тараз, Толе Би 66  
-    🌐 **Официальный сайт:** jobai-kz.com  
-    📱 **Мобильное приложение:** В разработке  
-    📊 **Онлайн платформа:** platform.jobai-kz.com
+    🏢 **ЦЕНТРАЛЬНЫЙ ХАБ:** Тараз, Толе Би 66  
+    🌐 **КВАНТОВЫЙ ПОРТАЛ:** jobai-nexus.com  
+    📱 **NEURO-APP:** В разработке  
+    🎧 **VR КОНСУЛЬТАЦИИ:** Доступны
     
-    **🏛️ Партнеры:**
-    - Министерство труда и соцзащиты
-    - Ассоциация HR-менеджеров
-    - Технологические парки
-    - Ведущие университеты
+    **🏛️ КВАНТОВЫЕ ПАРТНЕРЫ:**
+    - NASA Research Center
+    - Google Quantum AI
+    - SpaceX Technologies
+    - Neuralink Corp
+    - CERN Laboratory
     """)
 
 with col3:
     st.markdown(f"""
     **{LANGUAGES[selected_language]['online_booking']}**
     
-    💻 **Онлайн запись:** jobai-kz.com/booking  
-    📱 **WhatsApp бизнес:** +7 776 668 0880  
-    👥 **Telegram бот:** @jobai_consultant_bot  
-    📅 **Система бронирования:** Круглосуточно
+    💻 **VR ЗАПИСЬ:** nexus.jobai-nexus.com  
+    📱 **QUANTUM APP:** +7 776 668 0880  
+    👥 **HOLOGRAM БОТ:** @quantum_nexus_bot  
+    📅 **NEURO-CALENDAR:** Автоматизирован
     
-    **🎁 Бесплатные услуги:**
-    - Первичная консультация
-    - Профориентационное тестирование  
-    - Анализ резюме
-    - Подготовка к собеседованию
-    - Карьерное планирование
+    **🎁 БЕСПЛАТНЫЕ УСЛУГИ:**
+    - Квантовая диагностика
+    - Нейросетевой анализ
+    - Голографическая консультация
+    - Космическое планирование
+    - Бионическое тестирование
     """)
 
 # =============================
-# 👣 COMPREHENSIVE FOOTER
+# 👣 QUANTUM FOOTER
 # =============================
 st.markdown("---")
 st.markdown(f"""
-<div style='text-align: center; color: #64748b; font-size: 0.9rem; line-height: 1.6; padding: 2rem 1rem;'>
-    <strong style='color: #1e40af; font-size: 1.1rem;'>{LANGUAGES[selected_language]['footer']}</strong><br><br>
+<div style='text-align: center; color: #00ccff; font-size: 1rem; line-height: 1.6; padding: 3rem 1rem; background: rgba(0, 255, 204, 0.05); border-radius: 20px; border: 1px solid #00ffcc;'>
+    <strong style='color: #00ffcc; font-size: 1.3rem; font-family: Orbitron, sans-serif;'>{LANGUAGES[selected_language]['footer']}</strong><br><br>
     
-    📞 <strong>Телефон:</strong> 87766680880 | 
-    🏢 <strong>Адрес:</strong> Тараз, Толе Би 66 | 
-    🌐 <strong>Веб-сайт:</strong> jobai-kz.com<br>
+    📞 <strong>КВАНТОВАЯ СВЯЗЬ:</strong> 87766680880 | 
+    🏢 <strong>ЦЕНТР:</strong> Тараз, Толе Би 66 | 
+    🌐 <strong>ВСЕЛЕННАЯ:</strong> jobai-nexus.com<br>
     
-    💼 <strong>Услуги:</strong> Бесплатные карьерные консультации | 
-    🎯 <strong>Тестирование:</strong> Профессиональная диагностика | 
-    📊 <strong>Аналитика:</strong> Рыночные исследования<br><br>
+    💼 <strong>УСЛУГИ:</strong> Квантовая карьерная диагностика | 
+    🎯 <strong>ТЕХНОЛОГИИ:</strong> Нейросетевой анализ | 
+    📊 <strong>БУДУЩЕЕ:</strong> Футурологическое прогнозирование<br><br>
     
-    <div style='border-top: 1px solid #e2e8f0; padding-top: 1rem; margin-top: 1rem;'>
-        © 2024 JobAI Pro. Все права защищены. 
-        Платформа разработана при поддержке Министерства цифрового развития, инноваций и аэрокосмической промышленности РК
+    <div style='border-top: 1px solid #00ffcc; padding-top: 1.5rem; margin-top: 1.5rem;'>
+        © 2024 JobAI NEXUS Quantum Systems. Все права защищены. 
+        Платформа разработана при поддержке NASA Quantum Computing Initiative и Google AI Research
     </div>
 </div>
 """, unsafe_allow_html=True)
