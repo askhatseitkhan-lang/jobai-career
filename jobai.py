@@ -1044,15 +1044,51 @@ if st.session_state.assessment_complete:
         "creative": creative_score
     }
     
+    # =============================
+# 📊 RESULTS ANALYSIS
+# =============================
+if st.session_state.assessment_complete:
+    # Calculate results
+    questions = questions_data[selected_language]
+    
+    # Simple scoring based on answer patterns
+    tech_score = sum([st.session_state.answers.get(i, 3) for i in [0, 7, 13, 24, 34, 44]]) / 6 * 20
+    creative_score = sum([st.session_state.answers.get(i, 3) for i in [4, 13, 18, 27, 37, 47]]) / 6 * 20
+    social_score = sum([st.session_state.answers.get(i, 3) for i in [1, 5, 10, 21, 32, 38]]) / 6 * 20
+    physical_score = sum([st.session_state.answers.get(i, 3) for i in [3, 19, 29, 39, 44, 48]]) / 6 * 20
+    
+    scores = {
+        "it_tech": tech_score,
+        "healthcare": social_score,
+        "engineering": (tech_score + physical_score) / 2,
+        "creative": creative_score
+    }
+    
     dominant_category = max(scores, key=scores.get)
-
-# ЗАЩИТА ОТ KeyError - проверяем существование категории
-if dominant_category not in professions_data:
-    # Если категория не найдена, используем первую доступную категорию
-    dominant_category = list(professions_data.keys())[0]
-    st.warning("⚠️ Произошла временная техническая ошибка. Показаны результаты для наиболее подходящей категории.")
-
-profession_info = professions_data[dominant_category]
+    
+    # ЗАЩИТА ОТ KeyError - проверяем существование категории
+    if dominant_category not in professions_data:
+        # Если категория не найдена, используем первую доступную категорию
+        dominant_category = list(professions_data.keys())[0]
+        st.warning("⚠️ Произошла временная техническая ошибка. Показаны результаты для наиболее подходящей категории.")
+    
+    profession_info = professions_data[dominant_category]
+    
+    # Display results
+    st.markdown("---")
+    
+    # SUCCESS HEADER
+    st.markdown("""
+    <div style="text-align: center; padding: 3rem 1rem; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.1) 100%); border-radius: 20px; margin: 2rem 0; border: 2px solid #3b82f6;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+        <h1 style="color: #3b82f6; margin-bottom: 1rem; font-size: 2.5rem; font-weight: 700;">
+            ТЕСТИРОВАНИЕ ЗАВЕРШЕНО!
+        </h1>
+        <p style="color: #cbd5e1; font-size: 1.2rem; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+            Ваш профессиональный профиль успешно проанализирован
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Display results
     st.markdown("---")
@@ -1279,5 +1315,6 @@ st.markdown(f"""
     💼 Профессиональное тестирование | 🎯 Карьерное консультирование
 </div>
 """, unsafe_allow_html=True)
+
 
 
