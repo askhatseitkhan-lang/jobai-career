@@ -1045,7 +1045,14 @@ if st.session_state.assessment_complete:
     }
     
     dominant_category = max(scores, key=scores.get)
-    profession_info = professions_data[dominant_category]
+
+# ЗАЩИТА ОТ KeyError - проверяем существование категории
+if dominant_category not in professions_data:
+    # Если категория не найдена, используем первую доступную категорию
+    dominant_category = list(professions_data.keys())[0]
+    st.warning("⚠️ Произошла временная техническая ошибка. Показаны результаты для наиболее подходящей категории.")
+
+profession_info = professions_data[dominant_category]
     
     # Display results
     st.markdown("---")
@@ -1272,4 +1279,5 @@ st.markdown(f"""
     💼 Профессиональное тестирование | 🎯 Карьерное консультирование
 </div>
 """, unsafe_allow_html=True)
+
 
