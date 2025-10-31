@@ -1288,38 +1288,8 @@ if st.session_state.test_started:
             percentage=int((st.session_state.current_question + 1)/len(questions)*100)
         ))
         
-        # Текущий вопрос
-        current_q = questions[st.session_state.current_question]
-        st.markdown(f'<div class="question-container">{st.session_state.current_question + 1}. {current_q}</div>', unsafe_allow_html=True)
-        
-        # Слайдер для ответа с метками
-        answer = st.slider(
-            "Ваш ответ", 
-            1, 5, 3, 
-            key=f"q{st.session_state.current_question}", 
-            label_visibility="collapsed"
-        )
-        
-        # Метки слайдера
-        st.markdown('''
-        <div class="slider-labels">
-            <span class="slider-label">1</span>
-            <span class="slider-label">2</span>
-            <span class="slider-label">3</span>
-            <span class="slider-label">4</span>
-            <span class="slider-label">5</span>
-        </div>
-        ''', unsafe_allow_html=True)
-        
-        col1, col2 = st.columns([3, 1])
-        with col2:
-            button_text = "Далее →" if st.session_state.current_question < len(questions) - 1 else "Завершить тест"
-            if st.button(button_text, use_container_width=True):
-                st.session_state.scores.append(answer)
-                st.session_state.current_question += 1
-                if st.session_state.current_question >= len(questions):
-                    st.session_state.current_question = len(questions)  # Завершаем тест
-                st.rerun()
+        st.session_state.current_question = len(questions)  # Завершаем тест
+        st.rerun(
     else:
         # Все вопросы отвечены - показываем результаты
         # Анализ результатов
@@ -1585,3 +1555,4 @@ st.markdown(f"""
     💼 Бесплатные карьерные консультации | 🎯 Профессиональное тестирование
 </div>
 """, unsafe_allow_html=True)
+
